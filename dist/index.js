@@ -2,7 +2,7 @@ import { NodeSquare } from './NodeSquare.js';
 const grid = document.getElementById('grid');
 const pathBtn = document.getElementById('find-path');
 const gridHash = new Map();
-pathBtn === null || pathBtn === void 0 ? void 0 : pathBtn.addEventListener('click', () => {
+pathBtn?.addEventListener('click', () => {
     // findPath()
     console.log('IMPLEMENT PATH FINDING');
 });
@@ -13,9 +13,12 @@ function gridSetup(numRows, numCols) {
         const row = [];
         for (let j = 0; j < numCols; j++) {
             const id = `${i}${j}`;
-            const node = new NodeSquare(id, false, false, 0, 0, 0);
+            const node = new NodeSquare(id, false, false, 0, 0, 0, {
+                x: j,
+                y: i,
+            });
             gridHash.set(id, node);
-            row.push({ x: j, y: i });
+            row.push(node);
         }
         grid.push(row);
     }
@@ -26,11 +29,11 @@ function drawGrid(gridSquare) {
     gridSquare.map((row) => {
         const rowDiv = document.createElement('div');
         rowDiv.classList.add('row');
-        grid === null || grid === void 0 ? void 0 : grid.appendChild(rowDiv);
+        grid?.appendChild(rowDiv);
         row.map((node) => {
             const nodeDiv = document.createElement('div');
             nodeDiv.classList.add('node');
-            // nodeDiv.id = node.id
+            nodeDiv.id = node.id;
             nodeDiv.setAttribute('data-active', 'false');
             nodeDiv.setAttribute('data-start', 'false');
             nodeDiv.setAttribute('data-target', 'false');
@@ -39,15 +42,17 @@ function drawGrid(gridSquare) {
     });
 }
 drawGrid(gridSquare);
+const node = gridSquare[4][4];
+console.log(node);
+console.log(node.getNeighbours(gridSquare));
 console.log(gridSquare);
-grid === null || grid === void 0 ? void 0 : grid.addEventListener('mousedown', (e) => {
+grid?.addEventListener('mousedown', (e) => {
     handleClick(e);
 });
 let firstClick = true;
 let secondClick = false;
 function handleClick(e) {
-    var _a;
-    const clickedDivId = (_a = e === null || e === void 0 ? void 0 : e.target) === null || _a === void 0 ? void 0 : _a.id;
+    const clickedDivId = e?.target?.id;
     const clickedDiv = document.getElementById(clickedDivId);
     if (clickedDiv) {
         const data = clickedDiv.dataset;

@@ -1,12 +1,5 @@
 import { NodeSquare } from './NodeSquare.js'
-
-// type Grid = NodeSquare[][]
-type NodePoint = {
-    x: number
-    y: number
-}
-
-type Grid = NodePoint[][]
+import { Grid } from './types'
 
 const grid = document.getElementById('grid')
 const pathBtn = document.getElementById('find-path')
@@ -25,10 +18,13 @@ function gridSetup(numRows: number, numCols: number) {
         const row = []
         for (let j = 0; j < numCols; j++) {
             const id = `${i}${j}`
-            const node = new NodeSquare(id, false, false, 0, 0, 0)
+            const node = new NodeSquare(id, false, false, 0, 0, 0, {
+                x: j,
+                y: i,
+            })
             gridHash.set(id, node)
 
-            row.push({ x: j, y: i })
+            row.push(node)
         }
         grid.push(row)
     }
@@ -48,7 +44,7 @@ function drawGrid(gridSquare: Grid) {
         row.map((node) => {
             const nodeDiv = document.createElement('div')
             nodeDiv.classList.add('node')
-            // nodeDiv.id = node.id
+            nodeDiv.id = node.id
             nodeDiv.setAttribute('data-active', 'false')
             nodeDiv.setAttribute('data-start', 'false')
             nodeDiv.setAttribute('data-target', 'false')
@@ -59,6 +55,9 @@ function drawGrid(gridSquare: Grid) {
 }
 
 drawGrid(gridSquare)
+const node = gridSquare[4][4]
+console.log(node)
+console.log(node.getNeighbours(gridSquare))
 console.log(gridSquare)
 
 grid?.addEventListener('mousedown', (e) => {
