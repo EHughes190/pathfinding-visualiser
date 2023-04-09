@@ -1,66 +1,23 @@
-import { NodeSquare } from './NodeSquare.js'
-import { Grid } from './types'
+import { Grid } from './Grid.js'
+import { NodePoint } from './NodePoint.js'
 
-const grid = document.getElementById('grid')
+const gridContainer = document.getElementById('grid')
 const pathBtn = document.getElementById('find-path')
-const gridHash = new Map<string, NodeSquare>()
+const gridHash = new Map<string, NodePoint>()
 
 pathBtn?.addEventListener('click', () => {
     // findPath()
     console.log('IMPLEMENT PATH FINDING')
 })
 
-// Creates a grid[][] holding our nodes
-function gridSetup(numRows: number, numCols: number) {
-    const grid = []
-
-    for (let i = 0; i < numRows; i++) {
-        const row = []
-        for (let j = 0; j < numCols; j++) {
-            const id = `${i}${j}`
-            const node = new NodeSquare(id, false, false, 0, 0, 0, {
-                x: j,
-                y: i,
-            })
-            gridHash.set(id, node)
-
-            row.push(node)
-        }
-        grid.push(row)
-    }
-
-    return grid
-}
-
-const gridSquare = gridSetup(5, 5)
-
-function drawGrid(gridSquare: Grid) {
-    gridSquare.map((row) => {
-        const rowDiv = document.createElement('div')
-        rowDiv.classList.add('row')
-
-        grid?.appendChild(rowDiv)
-
-        row.map((node) => {
-            const nodeDiv = document.createElement('div')
-            nodeDiv.classList.add('node')
-            nodeDiv.id = node.id
-            nodeDiv.setAttribute('data-active', 'false')
-            nodeDiv.setAttribute('data-start', 'false')
-            nodeDiv.setAttribute('data-target', 'false')
-
-            rowDiv.appendChild(nodeDiv)
-        })
-    })
-}
-
-drawGrid(gridSquare)
-const node = gridSquare[4][4]
+const grid = new Grid(5, 5)
+grid.draw(gridContainer)
+const node = grid.getGrid()[4][4]
 console.log(node)
-console.log(node.getNeighbours(gridSquare))
-console.log(gridSquare)
+console.log(node.getNeighbours(grid.getGrid()))
+console.log(grid.getGrid())
 
-grid?.addEventListener('mousedown', (e) => {
+gridContainer!.addEventListener('mousedown', (e) => {
     handleClick(e)
 })
 
@@ -112,13 +69,20 @@ function handleClick(e: any) {
     }
 }
 
-// function findPath(start: NodeSquare, target: NodeSquare) {
-//     console.log('FINDING PATH')
-//     console.log(gridHash)
+function findPath(start: NodePoint, target: NodePoint) {
+    console.log('FINDING PATH')
 
-//     const openList = []
-//     const closedList = []
-//     openList.push(start)
+    const openList = []
+    const closedList = []
+    openList.push(start)
 
-//     while (openList.length > 0) {}
-// }
+    while (openList.length > 0) {
+        const current = openList[0]
+        openList.pop()
+        closedList.push(current)
+
+        if (current === target) {
+            return
+        }
+    }
+}
