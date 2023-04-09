@@ -1,13 +1,16 @@
-export class NodeSquare {
-    constructor(id, isStart, isTarget, gCost, hCost, fCost, pos) {
+export class NodePoint {
+    constructor(id, isStart, isTarget, pos) {
         this.id = id;
         this.isStart = isStart;
         this.isTarget = isTarget;
-        this.gCost = gCost;
-        this.hCost = hCost;
-        this.fCost = fCost;
+        this.gCost = 0;
+        this.hCost = 0;
+        this.fCost = 0;
         this.pos = { x: pos.x, y: pos.y };
+        this.isWall = false;
+        this.parent = undefined;
     }
+    // returns all neighbours positions that are valid - not off the grid
     getNeighbours(grid) {
         const result = [];
         const dirs = [
@@ -32,4 +35,4 @@ export class NodeSquare {
         return result;
     }
 }
-//# sourceMappingURL=NodeSquare.js.map
+//# sourceMappingURL=NodePoint.js.map

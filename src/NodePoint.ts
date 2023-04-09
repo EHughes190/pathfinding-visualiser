@@ -1,35 +1,37 @@
-export class NodeSquare {
+import { NodePosition } from './types'
+
+export class NodePoint {
     id: string
     isStart: boolean
     isTarget: boolean
+    isWall: boolean
     gCost: number
     hCost: number
     fCost: number
-    pos: { x: number; y: number }
+    pos: NodePosition
+    parent: NodePoint | undefined
 
     constructor(
         id: string,
         isStart: boolean,
         isTarget: boolean,
-        gCost: number,
-        hCost: number,
-        fCost: number,
         pos: { x: number; y: number }
     ) {
         this.id = id
         this.isStart = isStart
         this.isTarget = isTarget
-        this.gCost = gCost
-        this.hCost = hCost
-        this.fCost = fCost
+        this.gCost = 0
+        this.hCost = 0
+        this.fCost = 0
         this.pos = { x: pos.x, y: pos.y }
+        this.isWall = false
+        this.parent = undefined
     }
 
-    getNeighbours(grid: NodeSquare[][]) {
-        const result: { x: number; y: number }[] = [] as {
-            x: number
-            y: number
-        }[]
+    // returns all neighbours positions that are valid - not off the grid
+    getNeighbours(grid: NodePoint[][]) {
+        const result: NodePosition[] = [] as NodePosition[]
+
         const dirs = [
             { x: 1, y: 0 },
             { x: 0, y: 1 },

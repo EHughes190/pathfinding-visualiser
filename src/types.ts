@@ -1,3 +1,5 @@
-import { NodeSquare } from './NodeSquare'
+import { NodePoint } from './NodePoint'
 
-export type Grid = NodeSquare[][]
+export type Grid = NodePoint[][]
+
+export type NodePosition = { x: number; y: number }
