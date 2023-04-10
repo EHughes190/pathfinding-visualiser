@@ -19,7 +19,7 @@ export class Grid {
         for (let i = 0; i < this.numRows; i++) {
             const row = []
             for (let j = 0; j < this.numCols; j++) {
-                const id = `${i}${j}`
+                const id = `${j}${i}`
                 const pos = { x: j, y: i }
                 const node = new NodePoint(id, false, false, pos)
 

@@ -1,19 +1,26 @@
 import { Grid } from './Grid.js';
+import { MinHeap } from './MinHeap.js';
 const gridContainer = document.getElementById('grid');
 const pathBtn = document.getElementById('find-path');
 const gridHash = new Map();
 const grid = new Grid(5, 5);
 grid.draw(gridContainer);
-const node = grid.getGrid()[4][4];
 const nodeS = grid.getGrid()[0][0];
-const nodeT = grid.getGrid()[4][3];
-console.log(node);
-console.log(node.getNeighbours(grid.getGrid()));
+const nodeT = grid.getGrid()[4][0];
 console.log(grid.getGrid());
 pathBtn?.addEventListener('click', () => {
-    // findPath()
-    console.log('IMPLEMENT PATH FINDING');
-    findPath(nodeS, nodeT, grid);
+    console.log('FINDING PATH...');
+    const path = findPath(nodeS, nodeT, grid);
+    path?.forEach((node) => {
+        const pathDiv = document.getElementById(node.id);
+        if (pathDiv) {
+            pathDiv.style.backgroundColor = 'yellow';
+        }
+        const startDiv = document.getElementById(nodeS.id);
+        if (startDiv) {
+            startDiv.style.backgroundColor = 'blue';
+        }
+    });
 });
 gridContainer.addEventListener('mousedown', (e) => {
     handleClick(e);
@@ -58,6 +65,8 @@ function handleClick(e) {
         }
     }
 }
+// Estimates the hCost (dist from current Node and target)
+// OR the gCost (dist from start to curret Node)
 function heuristic(a, b) {
     const { x: ax, y: ay } = a.pos;
     const { x: bx, y: by } = b.pos;
@@ -69,50 +78,44 @@ function heuristic(a, b) {
     return 14 * dstX + 10 * (dstY - dstX);
 }
 function findPath(start, target, grid) {
-    const openList = [];
+    const openList = new MinHeap();
     const closedList = [];
-    openList.push(start);
+    openList.insert(start);
     while (openList.length > 0) {
-        let current = openList[0];
-        console.log(current);
-        for (let i = 1; i < openList.length; i++) {
-            if (openList[i].fCost < current.fCost ||
-                (openList[i].fCost === current.fCost &&
-                    openList[i].hCost < current.hCost)) {
-                current = openList[i];
-            }
-        }
-        openList.splice(0, 1);
+        let current = openList.delete();
         closedList.push(current);
+        // Found the target
         if (current === target) {
-            console.log('retracing path');
             return retracePath(start, target);
         }
         const neighbours = current.getNeighbours(grid.getGrid());
         neighbours.forEach((n) => {
+            //ignore wall nodes or if we've already checked this node
             if (n.isWall || closedList.includes(n)) {
                 return;
             }
+            // calculate new gCost of neighbour
             const newMovementCostToNeighbour = current.gCost + heuristic(current, n);
             if (newMovementCostToNeighbour < current.gCost ||
-                !openList.includes(n)) {
+                !openList.contains(n)) {
                 n.gCost = newMovementCostToNeighbour;
                 n.hCost = heuristic(n, target);
+                n.fCost = n.gCost + n.hCost;
                 n.parent = current;
-                if (!openList.includes(n)) {
-                    openList.push(n);
+                if (!openList.contains(n)) {
+                    openList.insert(n);
                 }
             }
         });
     }
 }
+// Walk from target, up each node's parent and adding it to the path list
 function retracePath(start, target) {
     const path = [];
     let current = target;
     while (current !== start) {
         path.push(current);
         if (current.parent) {
-            console.log(current);
             current = current.parent;
         }
     }
