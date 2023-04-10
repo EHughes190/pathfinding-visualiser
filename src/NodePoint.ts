@@ -30,7 +30,7 @@ export class NodePoint {
 
     // returns all neighbours positions that are valid - not off the grid
     getNeighbours(grid: NodePoint[][]) {
-        const result: NodePosition[] = [] as NodePosition[]
+        const neighbours: NodePoint[] = [] as NodePoint[]
 
         const dirs = [
             { x: 1, y: 0 },
@@ -44,18 +44,31 @@ export class NodePoint {
         ]
 
         dirs.forEach((dir) => {
-            const neighbour = { x: this.pos.x + dir.x, y: this.pos.y + dir.y }
+            const neighbourPos = {
+                x: this.pos.x + dir.x,
+                y: this.pos.y + dir.y,
+            }
 
             if (
-                neighbour.x >= 0 &&
-                neighbour.y >= 0 &&
-                neighbour.x < grid[0].length &&
-                neighbour.y < grid.length
+                neighbourPos.x >= 0 &&
+                neighbourPos.y >= 0 &&
+                neighbourPos.x < grid[0].length &&
+                neighbourPos.y < grid.length
             ) {
-                result.push(neighbour)
+                grid.forEach((row) => {
+                    row.forEach((node) => {
+                        // node is a neighbour
+                        if (
+                            node.pos.x === neighbourPos.x &&
+                            node.pos.y === neighbourPos.y
+                        ) {
+                            neighbours.push(node)
+                        }
+                    })
+                })
             }
         })
 
-        return result
+        return neighbours
     }
 }

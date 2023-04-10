@@ -5,17 +5,20 @@ const gridContainer = document.getElementById('grid')
 const pathBtn = document.getElementById('find-path')
 const gridHash = new Map<string, NodePoint>()
 
-pathBtn?.addEventListener('click', () => {
-    // findPath()
-    console.log('IMPLEMENT PATH FINDING')
-})
-
 const grid = new Grid(5, 5)
 grid.draw(gridContainer)
 const node = grid.getGrid()[4][4]
+const nodeS = grid.getGrid()[0][0]
+const nodeT = grid.getGrid()[4][3]
 console.log(node)
 console.log(node.getNeighbours(grid.getGrid()))
 console.log(grid.getGrid())
+
+pathBtn?.addEventListener('click', () => {
+    // findPath()
+    console.log('IMPLEMENT PATH FINDING')
+    findPath(nodeS, nodeT, grid)
+})
 
 gridContainer!.addEventListener('mousedown', (e) => {
     handleClick(e)
@@ -69,20 +72,86 @@ function handleClick(e: any) {
     }
 }
 
-function findPath(start: NodePoint, target: NodePoint) {
-    console.log('FINDING PATH')
+function heuristic(a: NodePoint, b: NodePoint) {
+    const { x: ax, y: ay } = a.pos
+    const { x: bx, y: by } = b.pos
 
-    const openList = []
-    const closedList = []
+    const dstX = Math.abs(ax - bx)
+    const dstY = Math.abs(ay - by)
+
+    if (dstX > dstY) {
+        return 14 * dstY + 10 * (dstX - dstY)
+    }
+    return 14 * dstX + 10 * (dstY - dstX)
+}
+
+function findPath(start: NodePoint, target: NodePoint, grid: Grid) {
+    const openList: NodePoint[] = [] as NodePoint[]
+    const closedList: NodePoint[] = [] as NodePoint[]
     openList.push(start)
 
     while (openList.length > 0) {
-        const current = openList[0]
-        openList.pop()
+        let current = openList[0]
+        console.log(current)
+
+        for (let i = 1; i < openList.length; i++) {
+            if (
+                openList[i].fCost < current.fCost ||
+                (openList[i].fCost === current.fCost &&
+                    openList[i].hCost < current.hCost)
+            ) {
+                current = openList[i]
+            }
+        }
+
+        openList.splice(0, 1)
         closedList.push(current)
 
         if (current === target) {
-            return
+            console.log('retracing path')
+            return retracePath(start, target)
+        }
+
+        const neighbours = current.getNeighbours(grid.getGrid())
+
+        neighbours.forEach((n) => {
+            if (n.isWall || closedList.includes(n)) {
+                return
+            }
+
+            const newMovementCostToNeighbour =
+                current.gCost + heuristic(current, n)
+
+            if (
+                newMovementCostToNeighbour < current.gCost ||
+                !openList.includes(n)
+            ) {
+                n.gCost = newMovementCostToNeighbour
+                n.hCost = heuristic(n, target)
+                n.parent = current
+
+                if (!openList.includes(n)) {
+                    openList.push(n)
+                }
+            }
+        })
+    }
+}
+
+function retracePath(start: NodePoint, target: NodePoint) {
+    const path: NodePoint[] = [] as NodePoint[]
+
+    let current: NodePoint = target
+
+    while (current !== start) {
+        path.push(current)
+        if (current.parent) {
+            console.log(current)
+            current = current.parent
         }
     }
+    path.reverse()
+
+    console.log('PATH', path)
+    return path
 }
