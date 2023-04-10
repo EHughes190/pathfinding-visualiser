@@ -1,31 +1,37 @@
 import { Grid } from './Grid.js'
-import { NodePoint } from './NodePoint.js'
-import { MinHeap } from './MinHeap.js'
+import { findPath } from './aStar.js'
 
 const gridContainer = document.getElementById('grid')
 const pathBtn = document.getElementById('find-path')
-const gridHash = new Map<string, NodePoint>()
 
 const grid = new Grid(5, 5)
 grid.draw(gridContainer)
-const nodeS = grid.getGrid()[0][0]
-const nodeT = grid.getGrid()[4][0]
-console.log(grid.getGrid())
 
 pathBtn?.addEventListener('click', () => {
     console.log('FINDING PATH...')
-    const path = findPath(nodeS, nodeT, grid)
-    path?.forEach((node) => {
-        const pathDiv = document.getElementById(node.id)
-        if (pathDiv) {
-            pathDiv.style.backgroundColor = 'yellow'
-        }
+    const start = grid
+        .getGrid()
+        .map((row) => {
+            return row.filter((node) => node.isStart).flat()
+        })
+        .flat()
 
-        const startDiv = document.getElementById(nodeS.id)
-        if (startDiv) {
-            startDiv.style.backgroundColor = 'blue'
+    const target = grid
+        .getGrid()
+        .map((row) => {
+            return row.filter((node) => node.isTarget).flat()
+        })
+        .flat()
+
+    const path = findPath(start[0], target[0], grid)
+    if (path) {
+        for (let i = 0; i < path.length - 1; i++) {
+            const pathDiv = document.getElementById(path[i].id)
+            if (pathDiv) {
+                pathDiv.style.backgroundColor = 'yellow'
+            }
         }
-    })
+    }
 })
 
 gridContainer!.addEventListener('mousedown', (e) => {
@@ -38,37 +44,45 @@ let secondClick = false
 function handleClick(e: any) {
     const clickedDivId = e?.target?.id
     const clickedDiv = document.getElementById(clickedDivId)
+    const [x, y] = clickedDivId.split('')
     if (clickedDiv) {
         const data = clickedDiv.dataset
 
+        // Set the start node
         if (firstClick) {
             data.start = 'true'
             firstClick = false
             secondClick = true
-            clickedDiv.style.backgroundColor = 'yellow'
-            if (gridHash && gridHash.get(clickedDivId)) {
-                gridHash.get(clickedDivId)!.isStart = true
-            }
-            return
-        }
-
-        if (secondClick) {
-            data.target = 'true'
-            secondClick = false
             clickedDiv.style.backgroundColor = 'blue'
-            if (gridHash && gridHash.get(clickedDivId)) {
-                gridHash.get(clickedDivId)!.isTarget = true
+
+            // we can use the id as x and y coordinates to identify node in grid and update the isStart var.
+            grid.getGrid()[y][x].isStart = true
+
+            return
+        }
+
+        // Set the Target node
+        if (secondClick) {
+            if (grid.getGrid()[y][x].isStart === false) {
+                data.target = 'true'
+                secondClick = false
+                clickedDiv.style.backgroundColor = 'red'
+
+                // we can use the id as x and y coordinates to identify node in grid and update the isTarget  var.
+                grid.getGrid()[y][x].isTarget = true
             }
             return
         }
 
+        // Set a wall
         if (
             data.active === 'false' &&
             data.start !== 'true' &&
             data.target !== 'true'
         ) {
-            clickedDiv.style.backgroundColor = 'red'
+            clickedDiv.style.backgroundColor = 'grey'
             data.active = 'true'
+            grid.getGrid()[y][x].isWall = true
         } else if (
             data.active === 'true' &&
             data.start !== 'true' &&
@@ -76,83 +90,7 @@ function handleClick(e: any) {
         ) {
             clickedDiv.style.backgroundColor = '#f9f9f9'
             data.active = 'false'
+            grid.getGrid()[y][x].isWall = false
         }
     }
-}
-
-// Estimates the hCost (dist from current Node and target)
-// OR the gCost (dist from start to curret Node)
-function heuristic(a: NodePoint, b: NodePoint) {
-    const { x: ax, y: ay } = a.pos
-    const { x: bx, y: by } = b.pos
-
-    const dstX = Math.abs(ax - bx)
-    const dstY = Math.abs(ay - by)
-
-    if (dstX > dstY) {
-        return 14 * dstY + 10 * (dstX - dstY)
-    }
-    return 14 * dstX + 10 * (dstY - dstX)
-}
-
-function findPath(start: NodePoint, target: NodePoint, grid: Grid) {
-    const openList: MinHeap = new MinHeap()
-    const closedList: NodePoint[] = [] as NodePoint[]
-    openList.insert(start)
-
-    while (openList.length > 0) {
-        let current = openList.delete()
-
-        closedList.push(current)
-
-        // Found the target
-        if (current === target) {
-            return retracePath(start, target)
-        }
-
-        const neighbours = current.getNeighbours(grid.getGrid())
-
-        neighbours.forEach((n) => {
-            //ignore wall nodes or if we've already checked this node
-            if (n.isWall || closedList.includes(n)) {
-                return
-            }
-
-            // calculate new gCost of neighbour
-            const newMovementCostToNeighbour =
-                current.gCost + heuristic(current, n)
-
-            if (
-                newMovementCostToNeighbour < current.gCost ||
-                !openList.contains(n)
-            ) {
-                n.gCost = newMovementCostToNeighbour
-                n.hCost = heuristic(n, target)
-                n.fCost = n.gCost + n.hCost
-                n.parent = current
-
-                if (!openList.contains(n)) {
-                    openList.insert(n)
-                }
-            }
-        })
-    }
-}
-
-// Walk from target, up each node's parent and adding it to the path list
-function retracePath(start: NodePoint, target: NodePoint) {
-    const path: NodePoint[] = [] as NodePoint[]
-
-    let current: NodePoint = target
-
-    while (current !== start) {
-        path.push(current)
-        if (current.parent) {
-            current = current.parent
-        }
-    }
-    path.reverse()
-
-    console.log('PATH', path)
-    return path
 }
