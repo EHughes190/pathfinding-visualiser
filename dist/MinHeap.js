@@ -51,15 +51,37 @@ export class MinHeap {
         const lV = this.data[lIdx];
         const rV = this.data[rIdx];
         const v = this.data[idx];
-        if (lV.fCost > rV.fCost && v.fCost > rV.fCost) {
-            this.data[idx] = rV;
-            this.data[rIdx] = v;
-            this.heapifyDown(rIdx);
+        // When heapifying down we want to choose the child who is Smallest, otherwise we would end up with a parent node which is bigger than one child
+        // If fCosts are the same, then we compare against hCosts
+        if (lV.fCost > rV.fCost ||
+            (lV.fCost === rV.fCost && lV.hCost > rV.hCost)) {
+            if (v.fCost > rV.fCost) {
+                this.data[idx] = rV;
+                this.data[rIdx] = v;
+                this.heapifyDown(rIdx);
+            }
+            else if (v.fCost === rV.fCost) {
+                if (v.hCost > rV.hCost) {
+                    this.data[idx] = rV;
+                    this.data[rIdx] = v;
+                    this.heapifyDown(rIdx);
+                }
+            }
         }
-        else if (rV.fCost > lV.fCost && v.fCost > lV.fCost) {
-            this.data[idx] = lV;
-            this.data[lIdx] = v;
-            this.heapifyDown(lIdx);
+        else if (rV.fCost > lV.fCost ||
+            (rV.fCost === lV.fCost && rV.hCost > lV.hCost)) {
+            if (v.fCost > lV.fCost) {
+                this.data[idx] = lV;
+                this.data[lIdx] = v;
+                this.heapifyDown(lIdx);
+            }
+            else if (v.fCost === lV.fCost) {
+                if (v.hCost > lV.hCost) {
+                    this.data[idx] = lV;
+                    this.data[lIdx] = v;
+                    this.heapifyDown(lIdx);
+                }
+            }
         }
     }
     heapifyUp(idx) {
@@ -71,7 +93,9 @@ export class MinHeap {
         const parentV = this.data[p];
         const v = this.data[idx];
         // parent val is larger so we need to move val up the tree
-        if (parentV.fCost > v.fCost) {
+        // But what if the fCosts are the same?? Well, we just compare based on the hCost instead
+        if (parentV.fCost > v.fCost ||
+            (parentV.fCost === v.fCost && parentV.hCost > v.hCost)) {
             this.data[idx] = parentV;
             this.data[p] = v;
             this.heapifyUp(p);

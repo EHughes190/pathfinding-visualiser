@@ -10,13 +10,30 @@ export function heuristic(a, b) {
         return 14 * dstY + 10 * (dstX - dstY);
     }
     return 14 * dstX + 10 * (dstY - dstX);
+    // Manhatten distance
+    // const d1 = Math.abs(b.pos.x - a.pos.x)
+    // const d2 = Math.abs(b.pos.y - b.pos.y)
+    // return d1 + d2
 }
 export function findPath(start, target, grid) {
     const openList = new MinHeap();
+    // const openList: NodePoint[] = [] as NodePoint[]
     const closedList = [];
     openList.insert(start);
+    // openList.push(start)
     while (openList.length > 0) {
         let current = openList.delete();
+        // let current = openList[0]
+        // for (let i = 1; i < openList.length; i++) {
+        //     if (
+        //         openList[i].fCost < current.fCost ||
+        //         (openList[i].fCost === current.fCost &&
+        //             openList[i].hCost < current.hCost)
+        //     ) {
+        //         current = openList[i]
+        //     }
+        // }
+        // openList.splice(0, 1)
         closedList.push(current);
         // Found the target
         if (current === target) {

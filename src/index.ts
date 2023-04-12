@@ -4,7 +4,7 @@ import { findPath } from './aStar.js'
 const gridContainer = document.getElementById('grid')
 const pathBtn = document.getElementById('find-path')
 
-const grid = new Grid(5, 5)
+const grid = new Grid(10, 10)
 grid.draw(gridContainer)
 
 pathBtn?.addEventListener('click', () => {

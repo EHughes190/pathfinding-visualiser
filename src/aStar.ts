@@ -1,6 +1,7 @@
 import { NodePoint } from './NodePoint.js'
 import { MinHeap } from './MinHeap.js'
 import { Grid } from './Grid.js'
+
 // Estimates the hCost (dist from current Node and target)
 // OR the gCost (dist from start to curret Node)
 export function heuristic(a: NodePoint, b: NodePoint) {
@@ -14,16 +15,36 @@ export function heuristic(a: NodePoint, b: NodePoint) {
         return 14 * dstY + 10 * (dstX - dstY)
     }
     return 14 * dstX + 10 * (dstY - dstX)
+
+    // Manhatten distance
+    // const d1 = Math.abs(b.pos.x - a.pos.x)
+    // const d2 = Math.abs(b.pos.y - b.pos.y)
+
+    // return d1 + d2
 }
 
 export function findPath(start: NodePoint, target: NodePoint, grid: Grid) {
     const openList: MinHeap = new MinHeap()
+    // const openList: NodePoint[] = [] as NodePoint[]
     const closedList: NodePoint[] = [] as NodePoint[]
     openList.insert(start)
+    // openList.push(start)
 
     while (openList.length > 0) {
         let current = openList.delete()
+        // let current = openList[0]
 
+        // for (let i = 1; i < openList.length; i++) {
+        //     if (
+        //         openList[i].fCost < current.fCost ||
+        //         (openList[i].fCost === current.fCost &&
+        //             openList[i].hCost < current.hCost)
+        //     ) {
+        //         current = openList[i]
+        //     }
+        // }
+
+        // openList.splice(0, 1)
         closedList.push(current)
 
         // Found the target

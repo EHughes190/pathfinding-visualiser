@@ -43,6 +43,7 @@ export class Grid {
 
             row.map((node) => {
                 const nodeDiv = document.createElement('div')
+                nodeDiv.innerHTML = node.id
                 nodeDiv.classList.add('node')
                 nodeDiv.id = node.id
                 nodeDiv.setAttribute('data-active', 'false')
