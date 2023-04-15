@@ -5,8 +5,16 @@ import { bfs } from './bfs.js';
 const gridContainer = document.getElementById('grid');
 const astarBtn = document.getElementById('find-astar');
 const bfsBtn = document.getElementById('find-bfs');
+const resetBtn = document.getElementById('reset');
 const grid = new Grid(10, 10);
 grid.draw(gridContainer);
+let firstClick = true;
+let secondClick = false;
+resetBtn?.addEventListener('click', () => {
+    grid.reset(gridContainer);
+    firstClick = true;
+    secondClick = false;
+});
 astarBtn?.addEventListener('click', () => {
     const { start, target } = setupStartAndTargetNodes(grid);
     const { path, seen } = aStar(start[0], target[0], grid.getGrid());
@@ -24,8 +32,6 @@ bfsBtn?.addEventListener('click', () => {
 gridContainer.addEventListener('mousedown', (e) => {
     handleGridClick(e);
 });
-let firstClick = true;
-let secondClick = false;
 function handleGridClick(e) {
     const clickedDivId = e?.target?.id;
     const clickedDiv = document.getElementById(clickedDivId);

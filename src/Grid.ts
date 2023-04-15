@@ -32,6 +32,17 @@ export class Grid {
         }
     }
 
+    reset(gridElement: HTMLElement | null) {
+        this.grid = []
+        if (gridElement) {
+            while (gridElement.hasChildNodes()) {
+                gridElement.removeChild(gridElement.children[0])
+            }
+        }
+
+        this.draw(gridElement)
+    }
+
     draw(gridElement: HTMLElement | null) {
         this.setup()
 

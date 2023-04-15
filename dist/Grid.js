@@ -23,6 +23,15 @@ export class Grid {
             this.grid.push(row);
         }
     }
+    reset(gridElement) {
+        this.grid = [];
+        if (gridElement) {
+            while (gridElement.hasChildNodes()) {
+                gridElement.removeChild(gridElement.children[0]);
+            }
+        }
+        this.draw(gridElement);
+    }
     draw(gridElement) {
         this.setup();
         this.grid.map((row) => {
