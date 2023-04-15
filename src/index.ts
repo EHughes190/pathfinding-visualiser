@@ -1,5 +1,6 @@
 import { Grid } from './Grid.js'
 import { aStar } from './aStar.js'
+import { setupStartAndTargetNodes, colourNodes } from './utils.js'
 import { bfs } from './bfs.js'
 
 const gridContainer = document.getElementById('grid')
@@ -10,97 +11,32 @@ const grid = new Grid(10, 10)
 grid.draw(gridContainer)
 
 astarBtn?.addEventListener('click', () => {
-    console.log('FINDING PATH...')
-    const start = grid
-        .getGrid()
-        .map((row) => {
-            return row.filter((node) => node.isStart).flat()
-        })
-        .flat()
-
-    const target = grid
-        .getGrid()
-        .map((row) => {
-            return row.filter((node) => node.isTarget).flat()
-        })
-        .flat()
+    const { start, target } = setupStartAndTargetNodes(grid)
 
     const { path, seen } = aStar(start[0], target[0], grid.getGrid())
-    console.log(seen)
-    console.log(path)
-    if (seen) {
-        for (let i = 0; i < seen.length - 1; i++) {
-            const seenDiv = document.getElementById(seen[i].id)
-            if (seenDiv) {
-                seenDiv.style.backgroundColor = 'pink'
-            }
-        }
-    }
-    if (path) {
-        for (let i = 0; i < path.length; i++) {
-            const pathDiv = document.getElementById(path[i].id)
-            if (pathDiv) {
-                if (i === 0) {
-                    pathDiv.style.backgroundColor = 'blue'
-                } else if (i === path.length - 1) {
-                    pathDiv.style.backgroundColor = 'red'
-                } else {
-                    pathDiv.style.backgroundColor = 'yellow'
-                }
-            }
-        }
+
+    if (seen && path) {
+        colourNodes(path, seen)
     }
 })
 
 bfsBtn?.addEventListener('click', () => {
-    console.log('FINDING PATH...')
-    const start = grid
-        .getGrid()
-        .map((row) => {
-            return row.filter((node) => node.isStart).flat()
-        })
-        .flat()
-
-    const target = grid
-        .getGrid()
-        .map((row) => {
-            return row.filter((node) => node.isTarget).flat()
-        })
-        .flat()
+    const { start, target } = setupStartAndTargetNodes(grid)
 
     const { path, seen } = bfs(start[0], target[0], grid.getGrid())
-    if (seen) {
-        for (let i = 0; i < seen.length - 1; i++) {
-            const seenDiv = document.getElementById(seen[i].id)
-            if (seenDiv) {
-                seenDiv.style.backgroundColor = 'pink'
-            }
-        }
-    }
-    if (path) {
-        for (let i = 0; i < path.length - 1; i++) {
-            const pathDiv = document.getElementById(path[i].id)
-            if (pathDiv) {
-                if (i === 0) {
-                    pathDiv.style.backgroundColor = 'blue'
-                } else if (i === path.length - 1) {
-                    pathDiv.style.backgroundColor = 'red'
-                } else {
-                    pathDiv.style.backgroundColor = 'yellow'
-                }
-            }
-        }
+    if (seen && path) {
+        colourNodes(path, seen)
     }
 })
 
 gridContainer!.addEventListener('mousedown', (e) => {
-    handleClick(e)
+    handleGridClick(e)
 })
 
 let firstClick = true
 let secondClick = false
 
-function handleClick(e: any) {
+function handleGridClick(e: any) {
     const clickedDivId = e?.target?.id
     const clickedDiv = document.getElementById(clickedDivId)
     const [x, y] = clickedDivId.split('')
