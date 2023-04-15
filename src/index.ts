@@ -1,13 +1,15 @@
 import { Grid } from './Grid.js'
-import { findPath } from './aStar.js'
+import { aStar } from './aStar.js'
+import { bfs } from './bfs.js'
 
 const gridContainer = document.getElementById('grid')
-const pathBtn = document.getElementById('find-path')
+const astarBtn = document.getElementById('find-astar')
+const bfsBtn = document.getElementById('find-bfs')
 
 const grid = new Grid(10, 10)
 grid.draw(gridContainer)
 
-pathBtn?.addEventListener('click', () => {
+astarBtn?.addEventListener('click', () => {
     console.log('FINDING PATH...')
     const start = grid
         .getGrid()
@@ -23,12 +25,69 @@ pathBtn?.addEventListener('click', () => {
         })
         .flat()
 
-    const path = findPath(start[0], target[0], grid)
+    const { path, seen } = aStar(start[0], target[0], grid.getGrid())
+    console.log(seen)
+    console.log(path)
+    if (seen) {
+        for (let i = 0; i < seen.length - 1; i++) {
+            const seenDiv = document.getElementById(seen[i].id)
+            if (seenDiv) {
+                seenDiv.style.backgroundColor = 'pink'
+            }
+        }
+    }
+    if (path) {
+        for (let i = 0; i < path.length; i++) {
+            const pathDiv = document.getElementById(path[i].id)
+            if (pathDiv) {
+                if (i === 0) {
+                    pathDiv.style.backgroundColor = 'blue'
+                } else if (i === path.length - 1) {
+                    pathDiv.style.backgroundColor = 'red'
+                } else {
+                    pathDiv.style.backgroundColor = 'yellow'
+                }
+            }
+        }
+    }
+})
+
+bfsBtn?.addEventListener('click', () => {
+    console.log('FINDING PATH...')
+    const start = grid
+        .getGrid()
+        .map((row) => {
+            return row.filter((node) => node.isStart).flat()
+        })
+        .flat()
+
+    const target = grid
+        .getGrid()
+        .map((row) => {
+            return row.filter((node) => node.isTarget).flat()
+        })
+        .flat()
+
+    const { path, seen } = bfs(start[0], target[0], grid.getGrid())
+    if (seen) {
+        for (let i = 0; i < seen.length - 1; i++) {
+            const seenDiv = document.getElementById(seen[i].id)
+            if (seenDiv) {
+                seenDiv.style.backgroundColor = 'pink'
+            }
+        }
+    }
     if (path) {
         for (let i = 0; i < path.length - 1; i++) {
             const pathDiv = document.getElementById(path[i].id)
             if (pathDiv) {
-                pathDiv.style.backgroundColor = 'yellow'
+                if (i === 0) {
+                    pathDiv.style.backgroundColor = 'blue'
+                } else if (i === path.length - 1) {
+                    pathDiv.style.backgroundColor = 'red'
+                } else {
+                    pathDiv.style.backgroundColor = 'yellow'
+                }
             }
         }
     }

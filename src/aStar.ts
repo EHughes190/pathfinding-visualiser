@@ -1,6 +1,6 @@
 import { NodePoint } from './NodePoint.js'
 import { MinHeap } from './MinHeap.js'
-import { Grid } from './Grid.js'
+import { Grid } from './types.js'
 
 // Estimates the hCost (dist from current Node and target)
 // OR the gCost (dist from start to curret Node)
@@ -23,7 +23,11 @@ export function heuristic(a: NodePoint, b: NodePoint) {
     // return d1 + d2
 }
 
-export function findPath(start: NodePoint, target: NodePoint, grid: Grid) {
+export function aStar(
+    start: NodePoint,
+    target: NodePoint,
+    grid: Grid
+): { path: NodePoint[]; seen: NodePoint[] } {
     const openList: MinHeap = new MinHeap()
     // const openList: NodePoint[] = [] as NodePoint[]
     const closedList: NodePoint[] = [] as NodePoint[]
@@ -49,10 +53,11 @@ export function findPath(start: NodePoint, target: NodePoint, grid: Grid) {
 
         // Found the target
         if (current === target) {
-            return retracePath(start, target)
+            console.log(closedList)
+            return { path: retracePath(start, target), seen: closedList }
         }
 
-        const neighbours = current.getNeighbours(grid.getGrid())
+        const neighbours = current.getNeighbours(grid)
 
         neighbours.forEach((n) => {
             //ignore wall nodes or if we've already checked this node
@@ -72,6 +77,7 @@ export function findPath(start: NodePoint, target: NodePoint, grid: Grid) {
                 n.hCost = heuristic(n, target)
                 n.fCost = n.gCost + n.hCost
                 n.parent = current
+                closedList.push(n)
 
                 if (!openList.contains(n)) {
                     openList.insert(n)
@@ -79,6 +85,7 @@ export function findPath(start: NodePoint, target: NodePoint, grid: Grid) {
             }
         })
     }
+    return { path: [] as NodePoint[], seen: closedList }
 }
 
 // Walk from target, up each node's parent and adding it to the path list
@@ -93,6 +100,7 @@ export function retracePath(start: NodePoint, target: NodePoint) {
             current = current.parent
         }
     }
+    path.push(start)
     path.reverse()
 
     console.log('PATH', path)

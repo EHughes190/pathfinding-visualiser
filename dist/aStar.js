@@ -15,7 +15,7 @@ export function heuristic(a, b) {
     // const d2 = Math.abs(b.pos.y - b.pos.y)
     // return d1 + d2
 }
-export function findPath(start, target, grid) {
+export function aStar(start, target, grid) {
     const openList = new MinHeap();
     // const openList: NodePoint[] = [] as NodePoint[]
     const closedList = [];
@@ -37,9 +37,10 @@ export function findPath(start, target, grid) {
         closedList.push(current);
         // Found the target
         if (current === target) {
-            return retracePath(start, target);
+            console.log(closedList);
+            return { path: retracePath(start, target), seen: closedList };
         }
-        const neighbours = current.getNeighbours(grid.getGrid());
+        const neighbours = current.getNeighbours(grid);
         neighbours.forEach((n) => {
             //ignore wall nodes or if we've already checked this node
             if (n.isWall || closedList.includes(n)) {
@@ -53,12 +54,14 @@ export function findPath(start, target, grid) {
                 n.hCost = heuristic(n, target);
                 n.fCost = n.gCost + n.hCost;
                 n.parent = current;
+                closedList.push(n);
                 if (!openList.contains(n)) {
                     openList.insert(n);
                 }
             }
         });
     }
+    return { path: [], seen: closedList };
 }
 // Walk from target, up each node's parent and adding it to the path list
 export function retracePath(start, target) {
@@ -70,6 +73,7 @@ export function retracePath(start, target) {
             current = current.parent;
         }
     }
+    path.push(start);
     path.reverse();
     console.log('PATH', path);
     return path;
