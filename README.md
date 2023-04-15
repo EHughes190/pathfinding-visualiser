@@ -1,12 +1,22 @@
-Pathfinding Proof of concept/ Test for A\* algorithm
-
-![7hovng](https://user-images.githubusercontent.com/77494320/230996678-5bff4921-743a-4393-ab54-1a916beae549.gif)  ![7hyaz9](https://user-images.githubusercontent.com/77494320/231605295-98385140-9678-4db4-8810-90b10f9885bc.gif)   ![7hyb14](https://user-images.githubusercontent.com/77494320/231605300-4ea8f9c4-09cf-414d-9660-a31c642bc7e8.gif)
+## Pathfinding Proof of concept/ Test for A\* algorithm
 
 -   Install dependencies with `yarn install`
 -   Run `npm run compile` to begin tsc to watch for changes
 -   Launch with Live server or similar (cors errors)
 
-To clear the grid, reload the page.
+To clear the grid, press Reset.
 First click will set the start node, Second click will set the target node.
 Subsequent clicks will toggle walls (clicking on a wall will make it a path again).
 Click the Find Path button to find the path
+
+### A*
+
+![7i9x8e](https://user-images.githubusercontent.com/77494320/232244528-a2ebecd6-3b88-48f0-94bb-ce2ec46f38a8.gif)
+
+### Breadth First Search
+
+![7i9xa1](https://user-images.githubusercontent.com/77494320/232244539-0b8a0428-2c10-4e41-9856-95b631e9c42f.gif)
+
+### Walls A*
+
+![7i9xc7](https://user-images.githubusercontent.com/77494320/232244621-4d968c87-0c79-4d54-b057-57ddf6ca8620.gif)
