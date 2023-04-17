@@ -10,14 +10,18 @@ export function setupStartAndTargetNodes(grid: Grid): {
         .map((row) => {
             return row.filter((node) => node.isStart).concat()
         })
-        .reduce(function(a,b){return a.concat(b);})
+        .reduce(function (a, b) {
+            return a.concat(b)
+        })
 
     const target = grid
         .getGrid()
         .map((row) => {
             return row.filter((node) => node.isTarget).concat()
         })
-        .reduce(function(a,b){return a.concat(b);})
+        .reduce(function (a, b) {
+            return a.concat(b)
+        })
 
     return { start, target }
 }
@@ -36,9 +40,9 @@ export function colourNodes(path: NodePoint[], seen: NodePoint[]): void {
         const pathDiv = document.getElementById(path[i].id)
         if (pathDiv) {
             if (i === 0) {
-                pathDiv.style.backgroundColor = 'blue'
+                pathDiv.style.backgroundColor = '#476C9B'
             } else if (i === path.length - 1) {
-                pathDiv.style.backgroundColor = 'red'
+                pathDiv.style.backgroundColor = '#984447'
             } else {
                 pathDiv.style.backgroundColor = 'yellow'
             }

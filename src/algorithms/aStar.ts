@@ -7,22 +7,22 @@ import { retracePath } from './utils.js'
 // OR the gCost (dist from start to curret Node)
 export function heuristic(a: NodePoint, b: NodePoint) {
     // Use for diagonal distances
-    // const { x: ax, y: ay } = a.pos
-    // const { x: bx, y: by } = b.pos
+    const { x: ax, y: ay } = a.pos
+    const { x: bx, y: by } = b.pos
 
-    // const dstX = Math.abs(ax - bx)
-    // const dstY = Math.abs(ay - by)
+    const dstX = Math.abs(ax - bx)
+    const dstY = Math.abs(ay - by)
 
-    // if (dstX > dstY) {
-    //     return 14 * dstY + 10 * (dstX - dstY)
-    // }
-    // return 14 * dstX + 10 * (dstY - dstX)
+    if (dstX > dstY) {
+        return 14 * dstY + 10 * (dstX - dstY)
+    }
+    return 14 * dstX + 10 * (dstY - dstX)
 
     // Manhatten distance - use for just N,E,S,W
-    const d1 = Math.abs(b.pos.x - a.pos.x)
-    const d2 = Math.abs(b.pos.y - b.pos.y)
+    // const d1 = Math.abs(b.pos.x - a.pos.x)
+    // const d2 = Math.abs(b.pos.y - b.pos.y)
 
-    return d1 + d2
+    // return d1 + d2
 }
 
 export function aStar(

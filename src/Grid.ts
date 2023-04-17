@@ -32,7 +32,7 @@ export class Grid {
         }
     }
 
-    reset(gridElement: HTMLElement | null) {
+    reset(gridElement: Element | null) {
         this.grid = []
         if (gridElement) {
             while (gridElement.hasChildNodes()) {
@@ -43,7 +43,7 @@ export class Grid {
         this.draw(gridElement)
     }
 
-    draw(gridElement: HTMLElement | null) {
+    draw(gridElement: Element | null) {
         this.setup()
 
         this.grid.map((row) => {

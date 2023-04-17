@@ -4,13 +4,17 @@ export function setupStartAndTargetNodes(grid) {
         .map(function (row) {
         return row.filter(function (node) { return node.isStart; }).concat();
     })
-        .reduce(function (a, b) { return a.concat(b); });
+        .reduce(function (a, b) {
+        return a.concat(b);
+    });
     var target = grid
         .getGrid()
         .map(function (row) {
         return row.filter(function (node) { return node.isTarget; }).concat();
     })
-        .reduce(function (a, b) { return a.concat(b); });
+        .reduce(function (a, b) {
+        return a.concat(b);
+    });
     return { start: start, target: target };
 }
 export function colourNodes(path, seen) {
@@ -26,10 +30,10 @@ export function colourNodes(path, seen) {
         var pathDiv = document.getElementById(path[i].id);
         if (pathDiv) {
             if (i === 0) {
-                pathDiv.style.backgroundColor = 'blue';
+                pathDiv.style.backgroundColor = '#476C9B';
             }
             else if (i === path.length - 1) {
-                pathDiv.style.backgroundColor = 'red';
+                pathDiv.style.backgroundColor = '#984447';
             }
             else {
                 pathDiv.style.backgroundColor = 'yellow';

@@ -2,10 +2,10 @@ import { Grid } from './Grid.js';
 import { aStar } from './algorithms/aStar.js';
 import { setupStartAndTargetNodes, colourNodes } from './utils.js';
 import { bfs } from './algorithms/bfs.js';
-var gridContainer = document.getElementById('grid');
-var astarBtn = document.getElementById('find-astar');
-var bfsBtn = document.getElementById('find-bfs');
-var resetBtn = document.getElementById('reset');
+var gridContainer = document.querySelector('.grid');
+var astarBtn = document.querySelector('#find-astar');
+var bfsBtn = document.querySelector('#find-bfs');
+var resetBtn = document.querySelector('#reset');
 var grid = new Grid(10, 10);
 grid.draw(gridContainer);
 var firstClick = true;
@@ -44,7 +44,7 @@ function handleGridClick(e) {
             data.start = 'true';
             firstClick = false;
             secondClick = true;
-            clickedDiv.style.backgroundColor = 'blue';
+            clickedDiv.style.backgroundColor = '#476C9B';
             // we can use the id as x and y coordinates to identify node in grid and update the isStart var.
             grid.getGrid()[y][x].isStart = true;
             return;
@@ -54,7 +54,7 @@ function handleGridClick(e) {
             if (grid.getGrid()[y][x].isStart === false) {
                 data.target = 'true';
                 secondClick = false;
-                clickedDiv.style.backgroundColor = 'red';
+                clickedDiv.style.backgroundColor = '#984447';
                 // we can use the id as x and y coordinates to identify node in grid and update the isTarget  var.
                 grid.getGrid()[y][x].isTarget = true;
             }
@@ -64,14 +64,14 @@ function handleGridClick(e) {
         if (data.active === 'false' &&
             data.start !== 'true' &&
             data.target !== 'true') {
-            clickedDiv.style.backgroundColor = 'grey';
+            clickedDiv.style.backgroundColor = '#656565';
             data.active = 'true';
             grid.getGrid()[y][x].isWall = true;
         }
         else if (data.active === 'true' &&
             data.start !== 'true' &&
             data.target !== 'true') {
-            clickedDiv.style.backgroundColor = '#f9f9f9';
+            clickedDiv.style.backgroundColor = '#fff';
             data.active = 'false';
             grid.getGrid()[y][x].isWall = false;
         }

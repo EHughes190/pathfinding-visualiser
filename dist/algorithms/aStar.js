@@ -4,18 +4,18 @@ import { retracePath } from './utils.js';
 // OR the gCost (dist from start to curret Node)
 export function heuristic(a, b) {
     // Use for diagonal distances
-    // const { x: ax, y: ay } = a.pos
-    // const { x: bx, y: by } = b.pos
-    // const dstX = Math.abs(ax - bx)
-    // const dstY = Math.abs(ay - by)
-    // if (dstX > dstY) {
-    //     return 14 * dstY + 10 * (dstX - dstY)
-    // }
-    // return 14 * dstX + 10 * (dstY - dstX)
+    var _a = a.pos, ax = _a.x, ay = _a.y;
+    var _b = b.pos, bx = _b.x, by = _b.y;
+    var dstX = Math.abs(ax - bx);
+    var dstY = Math.abs(ay - by);
+    if (dstX > dstY) {
+        return 14 * dstY + 10 * (dstX - dstY);
+    }
+    return 14 * dstX + 10 * (dstY - dstX);
     // Manhatten distance - use for just N,E,S,W
-    var d1 = Math.abs(b.pos.x - a.pos.x);
-    var d2 = Math.abs(b.pos.y - b.pos.y);
-    return d1 + d2;
+    // const d1 = Math.abs(b.pos.x - a.pos.x)
+    // const d2 = Math.abs(b.pos.y - b.pos.y)
+    // return d1 + d2
 }
 export function aStar(start, target, grid) {
     var openList = new MinHeap();

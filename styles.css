@@ -3,7 +3,7 @@
     padding: 0;
     box-sizing: border-box;
     overflow: hidden;
-    background-color: #303030;
+    background-color: #fff;
 }
 
 #canvas {
@@ -17,15 +17,17 @@
     max-height: 100%;
 }
 
-#grid {
+.grid {
     height: 500px;
     width: 500px;
-    background-color: #fff;
     display: grid;
+    border: 1px solid #151515;
 }
 
 .container {
     padding: 50px;
+    display: flex;
+    justify-content: center;
 }
 
 .row {
@@ -36,13 +38,14 @@
 .node {
     height: 100px;
     width: 100px;
-    border: 1px solid red;
-    background-color: #f9f9f9;
+    background-color: #fff;
+    border: 1px solid #151515;
 }
 
 .button {
     margin: 10px;
-    background-color: white;
+    background-color: #7785ac;
+    color: #fff;
     height: 50px;
     width: 100px;
     border-radius: 5px;
