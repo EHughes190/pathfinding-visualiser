@@ -1,5 +1,5 @@
-export class NodePoint {
-    constructor(id, isStart, isTarget, pos) {
+var NodePoint = /** @class */ (function () {
+    function NodePoint(id, isStart, isTarget, pos) {
         this.id = id;
         this.isStart = isStart;
         this.isTarget = isTarget;
@@ -11,29 +11,30 @@ export class NodePoint {
         this.parent = undefined;
     }
     // returns all neighbours positions that are valid - not off the grid
-    getNeighbours(grid) {
-        const neighbours = [];
-        const dirs = [
+    NodePoint.prototype.getNeighbours = function (grid) {
+        var _this = this;
+        var neighbours = [];
+        var dirs = [
             { x: 1, y: 0 },
             { x: 0, y: 1 },
             { x: -1, y: 0 },
             { x: 0, y: -1 },
-            { x: 1, y: 1 },
-            { x: -1, y: 1 },
-            { x: 1, y: -1 },
-            { x: -1, y: -1 },
+            // { x: 1, y: 1 },
+            // { x: -1, y: 1 },
+            // { x: 1, y: -1 },
+            // { x: -1, y: -1 },
         ];
-        dirs.forEach((dir) => {
-            const neighbourPos = {
-                x: this.pos.x + dir.x,
-                y: this.pos.y + dir.y,
+        dirs.forEach(function (dir) {
+            var neighbourPos = {
+                x: _this.pos.x + dir.x,
+                y: _this.pos.y + dir.y,
             };
             if (neighbourPos.x >= 0 &&
                 neighbourPos.y >= 0 &&
                 neighbourPos.x < grid[0].length &&
                 neighbourPos.y < grid.length) {
-                grid.forEach((row) => {
-                    row.forEach((node) => {
+                grid.forEach(function (row) {
+                    row.forEach(function (node) {
                         // node is a neighbour
                         if (node.pos.x === neighbourPos.x &&
                             node.pos.y === neighbourPos.y) {
@@ -44,6 +45,7 @@ export class NodePoint {
             }
         });
         return neighbours;
-    }
-}
-//# sourceMappingURL=NodePoint.js.map
+    };
+    return NodePoint;
+}());
+export { NodePoint };

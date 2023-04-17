@@ -1,7 +1,7 @@
 import { Grid } from './Grid.js'
-import { aStar } from './aStar.js'
+import { aStar } from './algorithms/aStar.js'
 import { setupStartAndTargetNodes, colourNodes } from './utils.js'
-import { bfs } from './bfs.js'
+import { bfs } from './algorithms/bfs.js'
 
 const gridContainer = document.getElementById('grid')
 const astarBtn = document.getElementById('find-astar')

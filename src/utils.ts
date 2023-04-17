@@ -8,16 +8,16 @@ export function setupStartAndTargetNodes(grid: Grid): {
     const start = grid
         .getGrid()
         .map((row) => {
-            return row.filter((node) => node.isStart).flat()
+            return row.filter((node) => node.isStart).concat()
         })
-        .flat()
+        .reduce(function(a,b){return a.concat(b);})
 
     const target = grid
         .getGrid()
         .map((row) => {
-            return row.filter((node) => node.isTarget).flat()
+            return row.filter((node) => node.isTarget).concat()
         })
-        .flat()
+        .reduce(function(a,b){return a.concat(b);})
 
     return { start, target }
 }

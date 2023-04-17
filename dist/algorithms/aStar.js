@@ -1,28 +1,29 @@
-import { MinHeap } from './MinHeap.js';
+import { MinHeap } from '../MinHeap.js';
+import { retracePath } from './utils.js';
 // Estimates the hCost (dist from current Node and target)
 // OR the gCost (dist from start to curret Node)
 export function heuristic(a, b) {
-    const { x: ax, y: ay } = a.pos;
-    const { x: bx, y: by } = b.pos;
-    const dstX = Math.abs(ax - bx);
-    const dstY = Math.abs(ay - by);
-    if (dstX > dstY) {
-        return 14 * dstY + 10 * (dstX - dstY);
-    }
-    return 14 * dstX + 10 * (dstY - dstX);
-    // Manhatten distance
-    // const d1 = Math.abs(b.pos.x - a.pos.x)
-    // const d2 = Math.abs(b.pos.y - b.pos.y)
-    // return d1 + d2
+    // Use for diagonal distances
+    // const { x: ax, y: ay } = a.pos
+    // const { x: bx, y: by } = b.pos
+    // const dstX = Math.abs(ax - bx)
+    // const dstY = Math.abs(ay - by)
+    // if (dstX > dstY) {
+    //     return 14 * dstY + 10 * (dstX - dstY)
+    // }
+    // return 14 * dstX + 10 * (dstY - dstX)
+    // Manhatten distance - use for just N,E,S,W
+    var d1 = Math.abs(b.pos.x - a.pos.x);
+    var d2 = Math.abs(b.pos.y - b.pos.y);
+    return d1 + d2;
 }
 export function aStar(start, target, grid) {
-    const openList = new MinHeap();
+    var openList = new MinHeap();
     // const openList: NodePoint[] = [] as NodePoint[]
-    const closedList = [];
+    var closedList = [];
     openList.insert(start);
-    // openList.push(start)
-    while (openList.length > 0) {
-        let current = openList.delete();
+    var _loop_1 = function () {
+        var current = openList.delete();
         // let current = openList[0]
         // for (let i = 1; i < openList.length; i++) {
         //     if (
@@ -38,16 +39,16 @@ export function aStar(start, target, grid) {
         // Found the target
         if (current === target) {
             console.log(closedList);
-            return { path: retracePath(start, target), seen: closedList };
+            return { value: { path: retracePath(start, target), seen: closedList } };
         }
-        const neighbours = current.getNeighbours(grid);
-        neighbours.forEach((n) => {
+        var neighbours = current.getNeighbours(grid);
+        neighbours.forEach(function (n) {
             //ignore wall nodes or if we've already checked this node
             if (n.isWall || closedList.includes(n)) {
                 return;
             }
             // calculate new gCost of neighbour
-            const newMovementCostToNeighbour = current.gCost + heuristic(current, n);
+            var newMovementCostToNeighbour = current.gCost + heuristic(current, n);
             if (newMovementCostToNeighbour < current.gCost ||
                 !openList.contains(n)) {
                 n.gCost = newMovementCostToNeighbour;
@@ -60,22 +61,12 @@ export function aStar(start, target, grid) {
                 }
             }
         });
+    };
+    // openList.push(start)
+    while (openList.length > 0) {
+        var state_1 = _loop_1();
+        if (typeof state_1 === "object")
+            return state_1.value;
     }
     return { path: [], seen: closedList };
 }
-// Walk from target, up each node's parent and adding it to the path list
-export function retracePath(start, target) {
-    const path = [];
-    let current = target;
-    while (current !== start) {
-        path.push(current);
-        if (current.parent) {
-            current = current.parent;
-        }
-    }
-    path.push(start);
-    path.reverse();
-    console.log('PATH', path);
-    return path;
-}
-//# sourceMappingURL=aStar.js.map

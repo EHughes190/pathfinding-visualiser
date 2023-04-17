@@ -1,29 +1,29 @@
 import { NodePoint } from './NodePoint.js';
-export class Grid {
-    constructor(numCols, numRows) {
+var Grid = /** @class */ (function () {
+    function Grid(numCols, numRows) {
         this.grid = [];
         this.numRows = numRows;
         this.numCols = numCols;
     }
-    getGrid() {
+    Grid.prototype.getGrid = function () {
         return this.grid;
-    }
+    };
     // Creates a grid[][] holding our nodes
-    setup() {
-        for (let i = 0; i < this.numRows; i++) {
-            const row = [];
-            for (let j = 0; j < this.numCols; j++) {
-                const id = `${j}${i}`;
-                const pos = { x: j, y: i };
-                const node = new NodePoint(id, false, false, pos);
+    Grid.prototype.setup = function () {
+        for (var i = 0; i < this.numRows; i++) {
+            var row = [];
+            for (var j = 0; j < this.numCols; j++) {
+                var id = "".concat(j).concat(i);
+                var pos = { x: j, y: i };
+                var node = new NodePoint(id, false, false, pos);
                 // add the node to a map for reference
                 // gridHash.set(id, node)
                 row.push(node);
             }
             this.grid.push(row);
         }
-    }
-    reset(gridElement) {
+    };
+    Grid.prototype.reset = function (gridElement) {
         this.grid = [];
         if (gridElement) {
             while (gridElement.hasChildNodes()) {
@@ -31,15 +31,15 @@ export class Grid {
             }
         }
         this.draw(gridElement);
-    }
-    draw(gridElement) {
+    };
+    Grid.prototype.draw = function (gridElement) {
         this.setup();
-        this.grid.map((row) => {
-            const rowDiv = document.createElement('div');
+        this.grid.map(function (row) {
+            var rowDiv = document.createElement('div');
             rowDiv.classList.add('row');
-            gridElement?.appendChild(rowDiv);
-            row.map((node) => {
-                const nodeDiv = document.createElement('div');
+            gridElement === null || gridElement === void 0 ? void 0 : gridElement.appendChild(rowDiv);
+            row.map(function (node) {
+                var nodeDiv = document.createElement('div');
                 nodeDiv.innerHTML = node.id;
                 nodeDiv.classList.add('node');
                 nodeDiv.id = node.id;
@@ -49,6 +49,7 @@ export class Grid {
                 rowDiv.appendChild(nodeDiv);
             });
         });
-    }
-}
-//# sourceMappingURL=Grid.js.map
+    };
+    return Grid;
+}());
+export { Grid };

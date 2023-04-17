@@ -14,24 +14,24 @@
  *
  *
  */
-export class MinHeap {
-    constructor() {
+var MinHeap = /** @class */ (function () {
+    function MinHeap() {
         this.data = [];
         this.length = 0;
     }
-    contains(n) {
+    MinHeap.prototype.contains = function (n) {
         return this.data.includes(n);
-    }
-    insert(value) {
+    };
+    MinHeap.prototype.insert = function (value) {
         this.data[this.length] = value;
         this.heapifyUp(this.length);
         this.length++;
-    }
-    delete() {
+    };
+    MinHeap.prototype.delete = function () {
         if (this.length === 0) {
             return {};
         }
-        const out = this.data[0];
+        var out = this.data[0];
         if (this.length === 0) {
             this.data = [];
             return out;
@@ -40,17 +40,17 @@ export class MinHeap {
         this.data[0] = this.data[this.length];
         this.heapifyDown(0);
         return out;
-    }
-    heapifyDown(idx) {
-        const lIdx = this.leftChild(idx);
-        const rIdx = this.rightChild(idx);
+    };
+    MinHeap.prototype.heapifyDown = function (idx) {
+        var lIdx = this.leftChild(idx);
+        var rIdx = this.rightChild(idx);
         // we are at the bottom of the tree
         if (idx >= this.length || lIdx >= this.length) {
             return;
         }
-        const lV = this.data[lIdx];
-        const rV = this.data[rIdx];
-        const v = this.data[idx];
+        var lV = this.data[lIdx];
+        var rV = this.data[rIdx];
+        var v = this.data[idx];
         // When heapifying down we want to choose the child who is Smallest, otherwise we would end up with a parent node which is bigger than one child
         // If fCosts are the same, then we compare against hCosts
         if (lV.fCost > rV.fCost ||
@@ -83,15 +83,15 @@ export class MinHeap {
                 }
             }
         }
-    }
-    heapifyUp(idx) {
+    };
+    MinHeap.prototype.heapifyUp = function (idx) {
         // We are at the top of the tree
         if (idx === 0) {
             return;
         }
-        const p = this.parent(idx);
-        const parentV = this.data[p];
-        const v = this.data[idx];
+        var p = this.parent(idx);
+        var parentV = this.data[p];
+        var v = this.data[idx];
         // parent val is larger so we need to move val up the tree
         // But what if the fCosts are the same?? Well, we just compare based on the hCost instead
         if (parentV.fCost > v.fCost ||
@@ -100,15 +100,16 @@ export class MinHeap {
             this.data[p] = v;
             this.heapifyUp(p);
         }
-    }
-    parent(idx) {
+    };
+    MinHeap.prototype.parent = function (idx) {
         return Math.floor((idx - 1) / 2);
-    }
-    leftChild(idx) {
+    };
+    MinHeap.prototype.leftChild = function (idx) {
         return idx * 2 + 1;
-    }
-    rightChild(idx) {
+    };
+    MinHeap.prototype.rightChild = function (idx) {
         return idx * 2 + 2;
-    }
-}
-//# sourceMappingURL=MinHeap.js.map
+    };
+    return MinHeap;
+}());
+export { MinHeap };

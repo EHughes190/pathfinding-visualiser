@@ -1,29 +1,29 @@
 export function setupStartAndTargetNodes(grid) {
-    const start = grid
+    var start = grid
         .getGrid()
-        .map((row) => {
-        return row.filter((node) => node.isStart).flat();
+        .map(function (row) {
+        return row.filter(function (node) { return node.isStart; }).concat();
     })
-        .flat();
-    const target = grid
+        .reduce(function (a, b) { return a.concat(b); });
+    var target = grid
         .getGrid()
-        .map((row) => {
-        return row.filter((node) => node.isTarget).flat();
+        .map(function (row) {
+        return row.filter(function (node) { return node.isTarget; }).concat();
     })
-        .flat();
-    return { start, target };
+        .reduce(function (a, b) { return a.concat(b); });
+    return { start: start, target: target };
 }
 export function colourNodes(path, seen) {
     //Loop over all seen nodes
-    for (let i = 0; i < seen.length - 1; i++) {
-        const seenDiv = document.getElementById(seen[i].id);
+    for (var i = 0; i < seen.length - 1; i++) {
+        var seenDiv = document.getElementById(seen[i].id);
         if (seenDiv) {
             seenDiv.style.backgroundColor = 'pink';
         }
     }
     // Loops over the path and recolours them
-    for (let i = 0; i < path.length; i++) {
-        const pathDiv = document.getElementById(path[i].id);
+    for (var i = 0; i < path.length; i++) {
+        var pathDiv = document.getElementById(path[i].id);
         if (pathDiv) {
             if (i === 0) {
                 pathDiv.style.backgroundColor = 'blue';
@@ -37,4 +37,3 @@ export function colourNodes(path, seen) {
         }
     }
 }
-//# sourceMappingURL=utils.js.map

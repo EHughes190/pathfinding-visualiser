@@ -1,26 +1,28 @@
-import { NodePoint } from './NodePoint.js'
-import { MinHeap } from './MinHeap.js'
-import { Grid } from './types.js'
+import { NodePoint } from '../NodePoint.js'
+import { MinHeap } from '../MinHeap.js'
+import { Grid } from '../types.js'
+import { retracePath } from './utils.js'
 
 // Estimates the hCost (dist from current Node and target)
 // OR the gCost (dist from start to curret Node)
 export function heuristic(a: NodePoint, b: NodePoint) {
-    const { x: ax, y: ay } = a.pos
-    const { x: bx, y: by } = b.pos
+    // Use for diagonal distances
+    // const { x: ax, y: ay } = a.pos
+    // const { x: bx, y: by } = b.pos
 
-    const dstX = Math.abs(ax - bx)
-    const dstY = Math.abs(ay - by)
+    // const dstX = Math.abs(ax - bx)
+    // const dstY = Math.abs(ay - by)
 
-    if (dstX > dstY) {
-        return 14 * dstY + 10 * (dstX - dstY)
-    }
-    return 14 * dstX + 10 * (dstY - dstX)
+    // if (dstX > dstY) {
+    //     return 14 * dstY + 10 * (dstX - dstY)
+    // }
+    // return 14 * dstX + 10 * (dstY - dstX)
 
-    // Manhatten distance
-    // const d1 = Math.abs(b.pos.x - a.pos.x)
-    // const d2 = Math.abs(b.pos.y - b.pos.y)
+    // Manhatten distance - use for just N,E,S,W
+    const d1 = Math.abs(b.pos.x - a.pos.x)
+    const d2 = Math.abs(b.pos.y - b.pos.y)
 
-    // return d1 + d2
+    return d1 + d2
 }
 
 export function aStar(
@@ -86,23 +88,4 @@ export function aStar(
         })
     }
     return { path: [] as NodePoint[], seen: closedList }
-}
-
-// Walk from target, up each node's parent and adding it to the path list
-export function retracePath(start: NodePoint, target: NodePoint) {
-    const path: NodePoint[] = [] as NodePoint[]
-
-    let current: NodePoint = target
-
-    while (current !== start) {
-        path.push(current)
-        if (current.parent) {
-            current = current.parent
-        }
-    }
-    path.push(start)
-    path.reverse()
-
-    console.log('PATH', path)
-    return path
 }

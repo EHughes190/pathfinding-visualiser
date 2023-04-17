@@ -1,43 +1,44 @@
 import { Grid } from './Grid.js';
-import { aStar } from './aStar.js';
+import { aStar } from './algorithms/aStar.js';
 import { setupStartAndTargetNodes, colourNodes } from './utils.js';
-import { bfs } from './bfs.js';
-const gridContainer = document.getElementById('grid');
-const astarBtn = document.getElementById('find-astar');
-const bfsBtn = document.getElementById('find-bfs');
-const resetBtn = document.getElementById('reset');
-const grid = new Grid(10, 10);
+import { bfs } from './algorithms/bfs.js';
+var gridContainer = document.getElementById('grid');
+var astarBtn = document.getElementById('find-astar');
+var bfsBtn = document.getElementById('find-bfs');
+var resetBtn = document.getElementById('reset');
+var grid = new Grid(10, 10);
 grid.draw(gridContainer);
-let firstClick = true;
-let secondClick = false;
-resetBtn?.addEventListener('click', () => {
+var firstClick = true;
+var secondClick = false;
+resetBtn === null || resetBtn === void 0 ? void 0 : resetBtn.addEventListener('click', function () {
     grid.reset(gridContainer);
     firstClick = true;
     secondClick = false;
 });
-astarBtn?.addEventListener('click', () => {
-    const { start, target } = setupStartAndTargetNodes(grid);
-    const { path, seen } = aStar(start[0], target[0], grid.getGrid());
+astarBtn === null || astarBtn === void 0 ? void 0 : astarBtn.addEventListener('click', function () {
+    var _a = setupStartAndTargetNodes(grid), start = _a.start, target = _a.target;
+    var _b = aStar(start[0], target[0], grid.getGrid()), path = _b.path, seen = _b.seen;
     if (seen && path) {
         colourNodes(path, seen);
     }
 });
-bfsBtn?.addEventListener('click', () => {
-    const { start, target } = setupStartAndTargetNodes(grid);
-    const { path, seen } = bfs(start[0], target[0], grid.getGrid());
+bfsBtn === null || bfsBtn === void 0 ? void 0 : bfsBtn.addEventListener('click', function () {
+    var _a = setupStartAndTargetNodes(grid), start = _a.start, target = _a.target;
+    var _b = bfs(start[0], target[0], grid.getGrid()), path = _b.path, seen = _b.seen;
     if (seen && path) {
         colourNodes(path, seen);
     }
 });
-gridContainer.addEventListener('mousedown', (e) => {
+gridContainer.addEventListener('mousedown', function (e) {
     handleGridClick(e);
 });
 function handleGridClick(e) {
-    const clickedDivId = e?.target?.id;
-    const clickedDiv = document.getElementById(clickedDivId);
-    const [x, y] = clickedDivId.split('');
+    var _a;
+    var clickedDivId = (_a = e === null || e === void 0 ? void 0 : e.target) === null || _a === void 0 ? void 0 : _a.id;
+    var clickedDiv = document.getElementById(clickedDivId);
+    var _b = clickedDivId.split(''), x = _b[0], y = _b[1];
     if (clickedDiv) {
-        const data = clickedDiv.dataset;
+        var data = clickedDiv.dataset;
         // Set the start node
         if (firstClick) {
             data.start = 'true';
@@ -76,4 +77,3 @@ function handleGridClick(e) {
         }
     }
 }
-//# sourceMappingURL=index.js.map

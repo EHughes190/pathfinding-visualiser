@@ -1,6 +1,6 @@
-import { NodePoint } from './NodePoint.js'
-import { Grid } from './types.js'
-import { retracePath } from './aStar.js'
+import { NodePoint } from '../NodePoint.js'
+import { Grid } from '../types.js'
+import { retracePath } from './utils.js'
 
 export function bfs(
     start: NodePoint,
