@@ -24,6 +24,12 @@
     border: 1px solid #151515;
 }
 
+.button-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 25px;
+}
+
 .container {
     padding: 50px;
     display: flex;
@@ -54,6 +60,8 @@
 
 .button:hover {
     cursor: pointer;
+    scale: 1.05;
+    transition: 100ms ease-in-out;
 }
 
 .button:active {
