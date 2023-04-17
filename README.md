@@ -1,4 +1,4 @@
-## Pathfinding Proof of concept/ Test for A\* algorithm
+## Pathfinding Visualisation for algorithms
 
 -   Install dependencies with `yarn install`
 -   Run `npm run compile` to begin tsc to watch for changes
