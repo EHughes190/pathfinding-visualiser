@@ -4,19 +4,76 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>A*</title>
+        <title>Pathfinding Algorithms</title>
         <link rel="stylesheet" href="styles.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
     </head>
     <body>
-        <!-- <canvas id="canvas"></canvas> -->
-        <div class="button-container">
-            <button id="find-astar" class="button">Find A*</button>
-            <button id="find-bfs" class="button">Find BFS</button>
-            <button id="reset" class="button">Reset Grid</button>
-        </div>
-        <div class="container">
-            <div class="grid"></div>
-        </div>
+        <section class="navbar-container">
+            <div class="navbar">
+                <div class="navbar__title">
+                    <div class="navbar__title-icons">
+                        <i class="fa-solid fa-sun"></i>
+                        <i class="fa-solid fa-toggle-on"></i>
+                    </div>
+                    <p class="navbar__title-text">Pathfinding Visualiser</p>
+                </div>
+                <div class="navbar__actions">
+                    <div class="navbar__buttons">
+                        <div class="navbar__buttons-algorithm">
+                            <button id="find-astar" class="button">
+                                <p>Find A*</p>
+                            </button>
+                            <button id="find-bfs" class="button">
+                                <p>Find BFS</p>
+                            </button>
+                            <button id="find-djikstra" class="button">
+                                <p>Find Djikstra</p>
+                            </button>
+                        </div>
+                        <div class="navbar__buttons-reset">
+                            <button id="reset" class="button">
+                                <p>Reset</p>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="navbar__help">
+                        <p>Help</p>
+                        <i class="fa-solid fa-circle-chevron-down"></i>
+                        <div class="navbar__help-dropdown">
+                            <p>
+                                Clicking on the grid will set source, target and
+                                wall nodes. The first click will set the source,
+                                the second click will set the target. Any
+                                subsequent clicks will toggle walls
+                            </p>
+                            <p>
+                                Once you have created the grid layout, choose an
+                                algorithm to run.
+                            </p>
+                            <p>Press 'Reset' to to reset the grid</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="grid-container">
+            <div class="grid-blur">
+                <div class="grid"></div>
+            </div>
+        </section>
 
         <script src="./dist/index.js" type="module"></script>
     </body>
