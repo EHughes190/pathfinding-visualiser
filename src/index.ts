@@ -11,7 +11,6 @@ const dijkstraBtn = document.querySelector('#find-dijkstra')
 const resetBtn = document.querySelector('#reset')
 
 const grid = new Grid(20, 20)
-console.log(grid)
 grid.draw(gridContainer)
 let firstClick = true
 let secondClick = false
@@ -50,6 +49,7 @@ bfsBtn?.addEventListener('click', () => {
 })
 
 gridContainer!.addEventListener('mousedown', (e) => {
+    e.preventDefault()
     handleGridClick(e)
 })
 
@@ -57,6 +57,9 @@ function handleGridClick(e: any) {
     const clickedDivId = e?.target?.id
     const clickedDiv = document.getElementById(clickedDivId)
     const { x, y } = grid.getGridHash().get(clickedDivId)!.pos
+    // we can use the id as x and y coordinates to identify node in grid and update the isTarget  var.
+    const node = grid.getGrid()[y][x]
+
     if (clickedDiv) {
         const data = clickedDiv.dataset
 
@@ -65,24 +68,20 @@ function handleGridClick(e: any) {
             data.start = 'true'
             firstClick = false
             secondClick = true
-            clickedDiv.style.backgroundColor = '#476C9B'
-
-            // we can use the id as x and y coordinates to identify node in grid and update the isStart var.
-            grid.getGrid()[y][x].isStart = true
-            console.log(clickedDiv)
+            clickedDiv.classList.add('start-node')
+            node.isStart = true
 
             return
         }
 
         // Set the Target node
         if (secondClick) {
-            if (grid.getGrid()[y][x].isStart === false) {
+            if (!node.isStart) {
                 data.target = 'true'
                 secondClick = false
-                clickedDiv.style.backgroundColor = '#984447'
+                clickedDiv.classList.add('target-node')
 
-                // we can use the id as x and y coordinates to identify node in grid and update the isTarget  var.
-                grid.getGrid()[y][x].isTarget = true
+                node.isTarget = true
             }
             return
         }
@@ -93,17 +92,17 @@ function handleGridClick(e: any) {
             data.start !== 'true' &&
             data.target !== 'true'
         ) {
-            clickedDiv.style.backgroundColor = '#656565'
+            clickedDiv.classList.add('wall-node')
             data.active = 'true'
-            grid.getGrid()[y][x].isWall = true
+            node.isWall = true
         } else if (
             data.active === 'true' &&
             data.start !== 'true' &&
             data.target !== 'true'
         ) {
-            clickedDiv.style.backgroundColor = '#fff'
+            clickedDiv.classList.remove('wall-node')
             data.active = 'false'
-            grid.getGrid()[y][x].isWall = false
+            node.isWall = false
         }
     }
 }

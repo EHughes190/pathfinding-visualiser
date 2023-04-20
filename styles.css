@@ -157,6 +157,35 @@ p {
     align-items: center;
 }
 
+.start-node {
+    animation-duration: 500ms;
+    animation-name: startnodecolour;
+    animation-fill-mode: forwards;
+}
+
+.target-node {
+    animation-duration: 500ms;
+    animation-name: targetnodecolour;
+    animation-fill-mode: forwards;
+    transition-timing-function: bounce;
+}
+
+.wall-node {
+    background-color: #656565;
+}
+
+@keyframes startnodecolour {
+    100% {
+        background-color: #476c9b;
+    }
+}
+
+@keyframes targetnodecolour {
+    100% {
+        background-color: #984447;
+    }
+}
+
 .node:hover {
     cursor: pointer;
 }

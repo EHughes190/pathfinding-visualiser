@@ -9,7 +9,6 @@ var bfsBtn = document.querySelector('#find-bfs');
 var dijkstraBtn = document.querySelector('#find-dijkstra');
 var resetBtn = document.querySelector('#reset');
 var grid = new Grid(20, 20);
-console.log(grid);
 grid.draw(gridContainer);
 var firstClick = true;
 var secondClick = false;
@@ -40,6 +39,7 @@ bfsBtn === null || bfsBtn === void 0 ? void 0 : bfsBtn.addEventListener('click',
     }
 });
 gridContainer.addEventListener('mousedown', function (e) {
+    e.preventDefault();
     handleGridClick(e);
 });
 function handleGridClick(e) {
@@ -47,6 +47,8 @@ function handleGridClick(e) {
     var clickedDivId = (_a = e === null || e === void 0 ? void 0 : e.target) === null || _a === void 0 ? void 0 : _a.id;
     var clickedDiv = document.getElementById(clickedDivId);
     var _b = grid.getGridHash().get(clickedDivId).pos, x = _b.x, y = _b.y;
+    // we can use the id as x and y coordinates to identify node in grid and update the isTarget  var.
+    var node = grid.getGrid()[y][x];
     if (clickedDiv) {
         var data = clickedDiv.dataset;
         // Set the start node
@@ -54,20 +56,17 @@ function handleGridClick(e) {
             data.start = 'true';
             firstClick = false;
             secondClick = true;
-            clickedDiv.style.backgroundColor = '#476C9B';
-            // we can use the id as x and y coordinates to identify node in grid and update the isStart var.
-            grid.getGrid()[y][x].isStart = true;
-            console.log(clickedDiv);
+            clickedDiv.classList.add('start-node');
+            node.isStart = true;
             return;
         }
         // Set the Target node
         if (secondClick) {
-            if (grid.getGrid()[y][x].isStart === false) {
+            if (!node.isStart) {
                 data.target = 'true';
                 secondClick = false;
-                clickedDiv.style.backgroundColor = '#984447';
-                // we can use the id as x and y coordinates to identify node in grid and update the isTarget  var.
-                grid.getGrid()[y][x].isTarget = true;
+                clickedDiv.classList.add('target-node');
+                node.isTarget = true;
             }
             return;
         }
@@ -75,16 +74,16 @@ function handleGridClick(e) {
         if (data.active === 'false' &&
             data.start !== 'true' &&
             data.target !== 'true') {
-            clickedDiv.style.backgroundColor = '#656565';
+            clickedDiv.classList.add('wall-node');
             data.active = 'true';
-            grid.getGrid()[y][x].isWall = true;
+            node.isWall = true;
         }
         else if (data.active === 'true' &&
             data.start !== 'true' &&
             data.target !== 'true') {
-            clickedDiv.style.backgroundColor = '#fff';
+            clickedDiv.classList.remove('wall-node');
             data.active = 'false';
-            grid.getGrid()[y][x].isWall = false;
+            node.isWall = false;
         }
     }
 }

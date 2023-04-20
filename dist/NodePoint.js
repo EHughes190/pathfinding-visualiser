@@ -29,13 +29,14 @@ var NodePoint = /** @class */ (function () {
                 x: _this.pos.x + dir.x,
                 y: _this.pos.y + dir.y,
             };
+            //if we are in bounds
             if (neighbourPos.x >= 0 &&
                 neighbourPos.y >= 0 &&
                 neighbourPos.x < grid[0].length &&
                 neighbourPos.y < grid.length) {
                 grid.forEach(function (row) {
                     row.forEach(function (node) {
-                        // node is a neighbour
+                        // if node is a neighbour
                         if (node.pos.x === neighbourPos.x &&
                             node.pos.y === neighbourPos.y) {
                             neighbours.push(node);

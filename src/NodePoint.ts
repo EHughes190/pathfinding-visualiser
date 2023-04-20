@@ -49,6 +49,7 @@ export class NodePoint {
                 y: this.pos.y + dir.y,
             }
 
+            //if we are in bounds
             if (
                 neighbourPos.x >= 0 &&
                 neighbourPos.y >= 0 &&
@@ -57,7 +58,7 @@ export class NodePoint {
             ) {
                 grid.forEach((row) => {
                     row.forEach((node) => {
-                        // node is a neighbour
+                        // if node is a neighbour
                         if (
                             node.pos.x === neighbourPos.x &&
                             node.pos.y === neighbourPos.y
