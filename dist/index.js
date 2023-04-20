@@ -2,11 +2,14 @@ import { Grid } from './Grid.js';
 import { aStar } from './algorithms/aStar.js';
 import { setupStartAndTargetNodes, colourNodes } from './utils.js';
 import { bfs } from './algorithms/bfs.js';
+import { dijkstras } from './algorithms/dijkstras.js';
 var gridContainer = document.querySelector('.grid');
 var astarBtn = document.querySelector('#find-astar');
 var bfsBtn = document.querySelector('#find-bfs');
+var dijkstraBtn = document.querySelector('#find-dijkstra');
 var resetBtn = document.querySelector('#reset');
-var grid = new Grid(10, 10);
+var grid = new Grid(20, 20);
+console.log(grid);
 grid.draw(gridContainer);
 var firstClick = true;
 var secondClick = false;
@@ -14,6 +17,13 @@ resetBtn === null || resetBtn === void 0 ? void 0 : resetBtn.addEventListener('c
     grid.reset(gridContainer);
     firstClick = true;
     secondClick = false;
+});
+dijkstraBtn === null || dijkstraBtn === void 0 ? void 0 : dijkstraBtn.addEventListener('click', function () {
+    var _a = setupStartAndTargetNodes(grid), start = _a.start, target = _a.target;
+    var _b = dijkstras(start[0], target[0], grid.getGrid()), path = _b.path, seen = _b.seen;
+    if (seen && path) {
+        colourNodes(path, seen);
+    }
 });
 astarBtn === null || astarBtn === void 0 ? void 0 : astarBtn.addEventListener('click', function () {
     var _a = setupStartAndTargetNodes(grid), start = _a.start, target = _a.target;

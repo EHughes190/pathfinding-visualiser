@@ -2,13 +2,16 @@ import { Grid } from './Grid.js'
 import { aStar } from './algorithms/aStar.js'
 import { setupStartAndTargetNodes, colourNodes } from './utils.js'
 import { bfs } from './algorithms/bfs.js'
+import { dijkstras } from './algorithms/dijkstras.js'
 
 const gridContainer = document.querySelector('.grid')
 const astarBtn = document.querySelector('#find-astar')
 const bfsBtn = document.querySelector('#find-bfs')
+const dijkstraBtn = document.querySelector('#find-dijkstra')
 const resetBtn = document.querySelector('#reset')
 
-const grid = new Grid(10, 10)
+const grid = new Grid(20, 20)
+console.log(grid)
 grid.draw(gridContainer)
 let firstClick = true
 let secondClick = false
@@ -17,6 +20,15 @@ resetBtn?.addEventListener('click', () => {
     grid.reset(gridContainer)
     firstClick = true
     secondClick = false
+})
+
+dijkstraBtn?.addEventListener('click', () => {
+    const { start, target } = setupStartAndTargetNodes(grid)
+    const { path, seen } = dijkstras(start[0], target[0], grid.getGrid())
+
+    if (seen && path) {
+        colourNodes(path, seen)
+    }
 })
 
 astarBtn?.addEventListener('click', () => {

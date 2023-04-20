@@ -1,5 +1,5 @@
 import { retracePath } from './utils.js';
-export function bfs(start, target, grid) {
+export function dijkstras(start, target, grid) {
     var seen = [start];
     var frontier = [start];
     var _loop_1 = function () {
@@ -10,13 +10,17 @@ export function bfs(start, target, grid) {
         var neighbours = current === null || current === void 0 ? void 0 : current.getNeighbours(grid);
         neighbours === null || neighbours === void 0 ? void 0 : neighbours.forEach(function (n) {
             if (current) {
+                var newCost = (current === null || current === void 0 ? void 0 : current.gCost) + 1;
                 if (seen.includes(n) || n.isWall) {
                     return;
                 }
-                if (!frontier.includes(n)) {
-                    frontier.push(n);
+                if (!frontier.includes(n) || newCost < current.gCost) {
+                    n.gCost = newCost;
                     seen.push(n);
                     n.parent = current;
+                    if (!frontier.includes(n)) {
+                        frontier.push(n);
+                    }
                 }
             }
         });
