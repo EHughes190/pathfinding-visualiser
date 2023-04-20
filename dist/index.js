@@ -46,7 +46,7 @@ function handleGridClick(e) {
     var _a;
     var clickedDivId = (_a = e === null || e === void 0 ? void 0 : e.target) === null || _a === void 0 ? void 0 : _a.id;
     var clickedDiv = document.getElementById(clickedDivId);
-    var _b = clickedDivId.split(''), x = _b[0], y = _b[1];
+    var _b = grid.getGridHash().get(clickedDivId).pos, x = _b.x, y = _b.y;
     if (clickedDiv) {
         var data = clickedDiv.dataset;
         // Set the start node
@@ -57,6 +57,7 @@ function handleGridClick(e) {
             clickedDiv.style.backgroundColor = '#476C9B';
             // we can use the id as x and y coordinates to identify node in grid and update the isStart var.
             grid.getGrid()[y][x].isStart = true;
+            console.log(clickedDiv);
             return;
         }
         // Set the Target node

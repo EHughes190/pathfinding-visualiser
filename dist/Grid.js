@@ -4,20 +4,24 @@ var Grid = /** @class */ (function () {
         this.grid = [];
         this.numRows = numRows;
         this.numCols = numCols;
+        this.gridHash = new Map();
     }
     Grid.prototype.getGrid = function () {
         return this.grid;
+    };
+    Grid.prototype.getGridHash = function () {
+        return this.gridHash;
     };
     // Creates a grid[][] holding our nodes
     Grid.prototype.setup = function () {
         for (var i = 0; i < this.numRows; i++) {
             var row = [];
             for (var j = 0; j < this.numCols; j++) {
-                var id = "".concat(j).concat(i);
+                var id = this.generateID(i, j).toString();
                 var pos = { x: j, y: i };
                 var node = new NodePoint(id, false, false, pos);
                 // add the node to a map for reference
-                // gridHash.set(id, node)
+                this.gridHash.set(id, node);
                 row.push(node);
             }
             this.grid.push(row);
@@ -40,7 +44,7 @@ var Grid = /** @class */ (function () {
             gridElement === null || gridElement === void 0 ? void 0 : gridElement.appendChild(rowDiv);
             row.map(function (node) {
                 var nodeDiv = document.createElement('div');
-                nodeDiv.innerHTML = node.id;
+                // nodeDiv.innerHTML = node.id
                 nodeDiv.classList.add('node');
                 nodeDiv.id = node.id;
                 nodeDiv.setAttribute('data-active', 'false');
@@ -49,6 +53,10 @@ var Grid = /** @class */ (function () {
                 rowDiv.appendChild(nodeDiv);
             });
         });
+    };
+    // Cantor pairing function
+    Grid.prototype.generateID = function (a, b) {
+        return (Math.pow(a, 2) + a + 2 * a * b + 3 * b + Math.pow(b, 2)) / 2;
     };
     return Grid;
 }());

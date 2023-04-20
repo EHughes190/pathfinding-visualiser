@@ -56,7 +56,7 @@ gridContainer!.addEventListener('mousedown', (e) => {
 function handleGridClick(e: any) {
     const clickedDivId = e?.target?.id
     const clickedDiv = document.getElementById(clickedDivId)
-    const [x, y] = clickedDivId.split('')
+    const { x, y } = grid.getGridHash().get(clickedDivId)!.pos
     if (clickedDiv) {
         const data = clickedDiv.dataset
 
@@ -69,6 +69,7 @@ function handleGridClick(e: any) {
 
             // we can use the id as x and y coordinates to identify node in grid and update the isStart var.
             grid.getGrid()[y][x].isStart = true
+            console.log(clickedDiv)
 
             return
         }

@@ -4,14 +4,20 @@ export class Grid {
     private numCols: number
     private numRows: number
     private grid: NodePoint[][] = []
+    private gridHash: Map<string, NodePoint>
 
     constructor(numCols: number, numRows: number) {
         this.numRows = numRows
         this.numCols = numCols
+        this.gridHash = new Map()
     }
 
     getGrid() {
         return this.grid
+    }
+
+    getGridHash() {
+        return this.gridHash
     }
 
     // Creates a grid[][] holding our nodes
@@ -19,12 +25,12 @@ export class Grid {
         for (let i = 0; i < this.numRows; i++) {
             const row = []
             for (let j = 0; j < this.numCols; j++) {
-                const id = `${j}${i}`
+                const id = this.generateID(i, j).toString()
                 const pos = { x: j, y: i }
                 const node = new NodePoint(id, false, false, pos)
 
                 // add the node to a map for reference
-                // gridHash.set(id, node)
+                this.gridHash.set(id, node)
 
                 row.push(node)
             }
@@ -54,7 +60,7 @@ export class Grid {
 
             row.map((node) => {
                 const nodeDiv = document.createElement('div')
-                nodeDiv.innerHTML = node.id
+                // nodeDiv.innerHTML = node.id
                 nodeDiv.classList.add('node')
                 nodeDiv.id = node.id
                 nodeDiv.setAttribute('data-active', 'false')
@@ -64,5 +70,10 @@ export class Grid {
                 rowDiv.appendChild(nodeDiv)
             })
         })
+    }
+
+    // Cantor pairing function
+    private generateID(a: number, b: number) {
+        return (Math.pow(a, 2) + a + 2 * a * b + 3 * b + Math.pow(b, 2)) / 2
     }
 }
