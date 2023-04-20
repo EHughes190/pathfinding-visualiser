@@ -5,24 +5,15 @@ import { retracePath } from './utils.js'
 
 // Estimates the hCost (dist from current Node and target)
 // OR the gCost (dist from start to curret Node)
-export function heuristic(a: NodePoint, b: NodePoint) {
-    // Use for diagonal distances
-    const { x: ax, y: ay } = a.pos
-    const { x: bx, y: by } = b.pos
-
-    const dstX = Math.abs(ax - bx)
-    const dstY = Math.abs(ay - by)
-
-    if (dstX > dstY) {
-        return 14 * dstY + 10 * (dstX - dstY)
-    }
-    return 14 * dstX + 10 * (dstY - dstX)
+export function heuristic(start: NodePoint, target: NodePoint) {
+    const { x: ax, y: ay } = start.pos
+    const { x: bx, y: by } = target.pos
 
     // Manhatten distance - use for just N,E,S,W
-    // const d1 = Math.abs(b.pos.x - a.pos.x)
-    // const d2 = Math.abs(b.pos.y - b.pos.y)
+    const d1 = Math.abs(ax - bx)
+    const d2 = Math.abs(ay - by)
 
-    // return d1 + d2
+    return d1 + d2
 }
 
 export function aStar(
@@ -30,62 +21,60 @@ export function aStar(
     target: NodePoint,
     grid: Grid
 ): { path: NodePoint[]; seen: NodePoint[] } {
-    const openList: MinHeap = new MinHeap()
-    // const openList: NodePoint[] = [] as NodePoint[]
-    const closedList: NodePoint[] = [] as NodePoint[]
-    openList.insert(start)
-    // openList.push(start)
+    start.gCost = 0
+    start.hCost = heuristic(start, target)
+    start.fCost = start.gCost + start.hCost
 
-    while (openList.length > 0) {
-        let current = openList.delete()
-        // let current = openList[0]
+    const openSet = [start]
+    const seen: NodePoint[] = [] as NodePoint[]
 
-        // for (let i = 1; i < openList.length; i++) {
-        //     if (
-        //         openList[i].fCost < current.fCost ||
-        //         (openList[i].fCost === current.fCost &&
-        //             openList[i].hCost < current.hCost)
-        //     ) {
-        //         current = openList[i]
-        //     }
-        // }
+    while (openSet.length) {
+        let current = openSet[0]
 
-        // openList.splice(0, 1)
-        closedList.push(current)
+        for (let i = 1; i < openSet.length; i++) {
+            if (
+                openSet[i].fCost < current.fCost ||
+                (openSet[i].fCost === current.fCost &&
+                    openSet[i].hCost < current.hCost)
+            ) {
+                current = openSet[i]
+            }
+        }
 
-        // Found the target
+        openSet.shift()
+
         if (current === target) {
-            console.log(closedList)
-            return { path: retracePath(start, target), seen: closedList }
+            return { path: retracePath(start, target), seen }
         }
 
         const neighbours = current.getNeighbours(grid)
+        console.log(current, neighbours)
 
-        neighbours.forEach((n) => {
-            //ignore wall nodes or if we've already checked this node
-            if (n.isWall || closedList.includes(n)) {
-                return
+        for (let i = 0; i < neighbours.length; i++) {
+            const n = neighbours[i]
+
+            if (n.isWall || seen.includes(n)) {
+                continue
             }
 
-            // calculate new gCost of neighbour
-            const newMovementCostToNeighbour =
-                current.gCost + heuristic(current, n)
+            // new gCost from current to neighbour node
+            const tentative_gcost = current.gCost + heuristic(current, n)
 
-            if (
-                newMovementCostToNeighbour < current.gCost ||
-                !openList.contains(n)
-            ) {
-                n.gCost = newMovementCostToNeighbour
-                n.hCost = heuristic(n, target)
-                n.fCost = n.gCost + n.hCost
+            // if the new gCost is less than the current cost, update the neighbour!
+            if (tentative_gcost < n.gCost) {
                 n.parent = current
-                closedList.push(n)
+                n.gCost = tentative_gcost
+                n.hCost = heuristic(neighbours[i], target)
+                n.fCost = tentative_gcost + n.hCost
+                seen.push(neighbours[i])
 
-                if (!openList.contains(n)) {
-                    openList.insert(n)
+                // add the neighbour to the openset for evaluation
+                if (!openSet.includes(n)) {
+                    openSet.push(n)
                 }
             }
-        })
+        }
     }
-    return { path: [] as NodePoint[], seen: closedList }
+
+    return { path: [] as NodePoint[], seen }
 }
