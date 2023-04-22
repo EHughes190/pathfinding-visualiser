@@ -49,31 +49,30 @@ p {
 .navbar__title,
 .navbar__actions {
     display: flex;
-    flex-direction: row;
-    width: 50%;
     align-items: center;
 }
 
 .navbar__actions {
     justify-content: space-between;
-    width: 60%;
+    width: 70%;
 }
 
 .navbar__buttons,
 .navbar__help {
     display: flex;
     align-items: center;
+}
+
+.navbar__help {
     justify-content: center;
 }
 
 .navbar__buttons {
-    display: flex;
-    width: 80%;
+    width: 90%;
     justify-content: space-around;
 }
 
 .navbar__buttons-algorithms {
-    display: flex;
     margin: 0px 10px;
 }
 

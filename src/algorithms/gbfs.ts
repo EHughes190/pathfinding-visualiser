@@ -47,6 +47,7 @@ export function gbfs(
             if (!openSet.includes(n)) {
                 n.parent = current
                 n.hCost = heuristic(n, target)
+                seen.push(n)
                 
                 // add the neighbour to the openset for evaluation
                 openSet.push(n)

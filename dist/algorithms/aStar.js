@@ -38,6 +38,7 @@ export function aStar(start, target, grid) {
                 n.gCost = tentative_gcost;
                 n.hCost = heuristic(neighbours[i], target);
                 n.fCost = tentative_gcost + n.hCost;
+                seen.push(n);
                 // add the neighbour to the openset for evaluation
                 if (!openSet.includes(n)) {
                     openSet.push(n);

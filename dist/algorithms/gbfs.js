@@ -30,6 +30,7 @@ export function gbfs(start, target, grid) {
             if (!openSet.includes(n)) {
                 n.parent = current;
                 n.hCost = heuristic(n, target);
+                seen.push(n);
                 // add the neighbour to the openset for evaluation
                 openSet.push(n);
             }
