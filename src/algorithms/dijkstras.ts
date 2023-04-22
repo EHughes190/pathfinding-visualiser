@@ -7,6 +7,7 @@ export function dijkstras(
     target: NodePoint,
     grid: Grid
 ): { path: NodePoint[]; seen: NodePoint[] } {
+    start.gCost = 0
     const seen: NodePoint[] = [start]
     const frontier = [start]
 

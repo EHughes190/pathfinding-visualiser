@@ -22,6 +22,12 @@ var MinHeap = /** @class */ (function () {
     MinHeap.prototype.contains = function (n) {
         return this.data.includes(n);
     };
+    MinHeap.prototype.peek = function () {
+        if (this.length === 0) {
+            return null;
+        }
+        return this.data[0];
+    };
     MinHeap.prototype.insert = function (value) {
         this.data[this.length] = value;
         this.heapifyUp(this.length);

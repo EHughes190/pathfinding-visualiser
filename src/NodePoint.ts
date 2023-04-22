@@ -21,7 +21,7 @@ export class NodePoint {
         this.isStart = isStart
         this.isTarget = isTarget
         this.gCost = Infinity
-        this.hCost = 0
+        this.hCost = Infinity
         this.fCost = Infinity
         this.pos = { x: pos.x, y: pos.y }
         this.isWall = false

@@ -1,5 +1,6 @@
 import { retracePath } from './utils.js';
 export function dijkstras(start, target, grid) {
+    start.gCost = 0;
     var seen = [start];
     var frontier = [start];
     var _loop_1 = function () {

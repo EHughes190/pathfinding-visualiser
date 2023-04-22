@@ -9,15 +9,18 @@ export function gbfs(start, target, grid) {
     while (openSet.length) {
         // let current = openSet.delete()
         var current = openSet[0];
+        var currentIndex = 0;
         for (var i = 1; i < openSet.length; i++) {
             if (openSet[i].hCost < current.hCost) {
                 current = openSet[i];
+                currentIndex = i;
             }
         }
-        openSet.shift();
+        openSet.splice(currentIndex, 1);
         if (current === target) {
             break;
         }
+        seen.push(current);
         var neighbours = current.getNeighbours(grid);
         for (var i = 0; i < neighbours.length; i++) {
             var n = neighbours[i];
@@ -27,7 +30,6 @@ export function gbfs(start, target, grid) {
             if (!openSet.includes(n)) {
                 n.parent = current;
                 n.hCost = heuristic(n, target);
-                seen.push(n);
                 // add the neighbour to the openset for evaluation
                 openSet.push(n);
             }

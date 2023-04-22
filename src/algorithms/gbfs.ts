@@ -18,18 +18,22 @@ export function gbfs(
     while (openSet.length) {
         // let current = openSet.delete()
         let current = openSet[0]
+        let currentIndex = 0
 
         for (let i = 1; i < openSet.length; i++) {
             if (openSet[i].hCost < current.hCost) {
                 current = openSet[i]
+                currentIndex = i
             }
         }
 
-        openSet.shift()
+        openSet.splice(currentIndex, 1)
 
         if (current === target) {
             break
         }
+
+        seen.push(current)
 
         const neighbours = current.getNeighbours(grid)
 
@@ -43,8 +47,7 @@ export function gbfs(
             if (!openSet.includes(n)) {
                 n.parent = current
                 n.hCost = heuristic(n, target)
-                seen.push(n)
-
+                
                 // add the neighbour to the openset for evaluation
                 openSet.push(n)
             }

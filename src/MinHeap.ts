@@ -29,6 +29,14 @@ export class MinHeap {
         return this.data.includes(n)
     }
 
+    peek(): NodePoint | null {
+        if (this.length === 0) {
+            return null
+        }
+
+        return this.data[0]
+    }
+
     insert(value: NodePoint): void {
         this.data[this.length] = value
         this.heapifyUp(this.length)
