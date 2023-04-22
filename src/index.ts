@@ -3,11 +3,13 @@ import { aStar } from './algorithms/aStar.js'
 import { setupStartAndTargetNodes, colourNodes } from './utils.js'
 import { bfs } from './algorithms/bfs.js'
 import { dijkstras } from './algorithms/dijkstras.js'
+import { gbfs } from './algorithms/gbfs.js'
 
 const gridContainer = document.querySelector('.grid')
 const astarBtn = document.querySelector('#find-astar')
 const bfsBtn = document.querySelector('#find-bfs')
 const dijkstraBtn = document.querySelector('#find-dijkstra')
+const gbfsBtn = document.querySelector('#find-gbfs')
 const resetBtn = document.querySelector('#reset')
 
 const grid = new Grid(20, 20)
@@ -24,6 +26,15 @@ resetBtn?.addEventListener('click', () => {
 dijkstraBtn?.addEventListener('click', () => {
     const { start, target } = setupStartAndTargetNodes(grid)
     const { path, seen } = dijkstras(start[0], target[0], grid.getGrid())
+
+    if (seen && path) {
+        colourNodes(path, seen)
+    }
+})
+
+gbfsBtn?.addEventListener('click', () => {
+    const { start, target } = setupStartAndTargetNodes(grid)
+    const { path, seen } = gbfs(start[0], target[0], grid.getGrid())
 
     if (seen && path) {
         colourNodes(path, seen)
@@ -56,11 +67,12 @@ gridContainer!.addEventListener('mousedown', (e) => {
 function handleGridClick(e: any) {
     const clickedDivId = e?.target?.id
     const clickedDiv = document.getElementById(clickedDivId)
-    const { x, y } = grid.getGridHash().get(clickedDivId)!.pos
-    // we can use the id as x and y coordinates to identify node in grid and update the isTarget  var.
-    const node = grid.getGrid()[y][x]
 
     if (clickedDiv) {
+        const { x, y } = grid.getGridHash().get(clickedDivId)!.pos
+        // we can use the id as x and y coordinates to identify node in grid and update the isTarget  var.
+        const node = grid.getGrid()[y][x]
+
         const data = clickedDiv.dataset
 
         // Set the start node
